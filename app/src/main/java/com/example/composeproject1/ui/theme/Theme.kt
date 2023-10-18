@@ -52,7 +52,7 @@ fun ComposeProject1Theme(
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
-    }
+    }.copy(primary = PrimaryColor)
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

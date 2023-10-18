@@ -73,7 +73,7 @@
         </activity>
         <activity
             android:name=".AirQualityActivity"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 
 </manifest>

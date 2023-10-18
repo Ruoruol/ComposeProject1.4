@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import com.example.composeproject1.ui.MedicationListScreen
 import com.example.composeproject1.viewmodel.MedicationListEvent
 import com.example.composeproject1.viewmodel.MedicationListVm
@@ -11,6 +12,7 @@ import com.example.composeproject1.viewmodel.MedicationListVm
 class MedicationListActivity : ComponentActivity() {
     private val vm by viewModels<MedicationListVm>()
     override fun onCreate(savedInstanceState: Bundle?) {
+        window?.statusBarColor = ContextCompat.getColor(this, R.color.bt_color)
         super.onCreate(savedInstanceState)
         setContent {
             MedicationListScreen(
@@ -20,5 +22,6 @@ class MedicationListActivity : ComponentActivity() {
             )
         }
         vm.dispatch(MedicationListEvent.Init)
+
     }
 }
