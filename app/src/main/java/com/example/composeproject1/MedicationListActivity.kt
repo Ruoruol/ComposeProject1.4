@@ -6,20 +6,22 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.example.composeproject1.ui.MedicationListScreen
+import com.example.composeproject1.ui.theme.ComposeProject1Theme
 import com.example.composeproject1.viewmodel.MedicationListEvent
 import com.example.composeproject1.viewmodel.MedicationListVm
 
 class MedicationListActivity : ComponentActivity() {
     private val vm by viewModels<MedicationListVm>()
     override fun onCreate(savedInstanceState: Bundle?) {
-        window?.statusBarColor = ContextCompat.getColor(this, R.color.bt_color)
         super.onCreate(savedInstanceState)
         setContent {
-            MedicationListScreen(
-                vm.list,
-                vm.invalidList,
-                vm::dispatch
-            )
+            ComposeProject1Theme {
+                MedicationListScreen(
+                    vm.list,
+                    vm.invalidList,
+                    vm::dispatch
+                )
+            }
         }
         vm.dispatch(MedicationListEvent.Init)
 

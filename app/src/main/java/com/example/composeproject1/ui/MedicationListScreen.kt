@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,6 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.composeproject1.App
 import com.example.composeproject1.database.MedicationData
+import com.example.composeproject1.ui.theme.DeleteColor
+import com.example.composeproject1.ui.theme.InvalidColor
+import com.example.composeproject1.ui.theme.PrimaryColor
 import com.example.composeproject1.viewmodel.MedicationListEvent
 import java.sql.Date
 
@@ -35,6 +39,7 @@ fun MedicationListScreen(
         items(dataList.size) {
             MedicationItem(
                 modifier = Modifier.padding(top = if (it == 0) 0.dp else 5.dp),
+                false,
                 dataList[it],
                 onEvent
             )
@@ -46,6 +51,7 @@ fun MedicationListScreen(
         items(invalidList.size) {
             MedicationItem(
                 modifier = Modifier.padding(top = if (it == 0) 0.dp else 5.dp),
+                true,
                 invalidList[it],
                 onEvent
             )
@@ -56,17 +62,21 @@ fun MedicationListScreen(
 @Composable
 fun MedicationItem(
     modifier: Modifier,
+    isInvalid: Boolean,
     medicationData: MedicationData,
     onEvent: (MedicationListEvent) -> Unit
 ) {
-    val isInvalid = remember(medicationData.id) {
-        medicationData.isValid == 0 || medicationData.time < System.currentTimeMillis()
-    }
     Box(contentAlignment = androidx.compose.ui.Alignment.Center) {
         ConstraintLayout(
             modifier = modifier
                 .fillMaxWidth()
-                .background(color = Color.Gray)
+                .run {
+                    if (isInvalid) {
+                        background(color = InvalidColor)
+                    } else {
+                        background(color = PrimaryColor)
+                    }
+                }
                 .padding(start = 14.dp, end = 14.dp)
         ) {
             val (title, desc, time, deleteButton) = createRefs()
@@ -91,13 +101,17 @@ fun MedicationItem(
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
             })
-            Button(onClick = {
-                onEvent(MedicationListEvent.Delete(medicationData.id))
-            }, modifier = Modifier.constrainAs(deleteButton) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                end.linkTo(parent.end)
-            }) {
+            Button(
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = DeleteColor,
+                    contentColor = Color.Black
+                ), onClick = {
+                    onEvent(MedicationListEvent.Delete(medicationData.id))
+                }, modifier = Modifier.constrainAs(deleteButton) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                }) {
                 Text(text = "删除")
             }
 
@@ -108,7 +122,7 @@ fun MedicationItem(
 @Preview
 @Composable
 fun MedicationListScreenPreview() {
-    MedicationItem(Modifier,MedicationData(1, "1", "1", "1", "1", 1, 1)) {
+    MedicationItem(Modifier,false, MedicationData(1, "1", "1", "1", "1", 1, 1)) {
 
     }
 
