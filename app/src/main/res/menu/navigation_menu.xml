@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/bt01"
+            android:title="首頁"
+            />
+
+        <item
+            android:id="@+id/bt02"
+            android:title="我的帳號" />
+
+        <item
+            android:id="@+id/bt03"
+            android:title="基本資料" />
+
+        <item
+            android:id="@+id/bt04"
+            android:title="空氣品質" />
+
+        <item
+            android:id="@+id/bt05"
+            android:title="心律睡眠" />
+
+        <item
+            android:id="@+id/bt06"
+            android:title="用藥提醒" />
+
+
+
+
+    </group>
+</menu>

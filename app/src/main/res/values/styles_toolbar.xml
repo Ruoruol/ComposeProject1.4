@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <!--Toolbar與Menu顏色與大小-->
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!--更改Menu選單內的文字顏色-->
+        <item name="android:textColor">@color/black</item>
+        <!--更改Toolbar上的選單顯示文字顏色-->
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <!--更改Toolbar所有文字的大小-->
+        <item name="android:textSize">20dp</item>
+        <!--更改Toolbar背景顏色-->
+        <item name="android:background">@color/teal_200</item>
+        <!--設定Menu視窗不覆蓋到Toolbar-->
+        <item name="overlapAnchor">false</item>
+
+
+    </style>
+
+    <!--Title大小-->
+    <style name="TitleTextSize" parent="@style/Base.TextAppearance.AppCompat.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+</resources>

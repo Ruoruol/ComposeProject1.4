@@ -1,0 +1,58 @@
+package com.example.composeproject1.model
+
+import com.example.composeproject1.App
+import com.example.composeproject1.database.AppDatabase
+import com.example.composeproject1.database.MedicationData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.UUID
+
+object DatabaseRepository {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    suspend fun getMedicationList(): List<MedicationData> {
+        return withContext(Dispatchers.IO) {
+            return@withContext AppDatabase.getDatabase(App.appContext).medicationDao()
+                .queryMedicationWithUserId(AppGlobalRepository.userName)
+        }
+    }
+
+    fun getMedicationById(id: Int): MedicationData? {
+        return AppDatabase.getDatabase(App.appContext).medicationDao().queryMedicationWithId(id)
+            .getOrNull(0)
+    }
+
+    fun deleteMedicationById(id: Int) {
+        scope.launch {
+            AppDatabase.getDatabase(App.appContext).medicationDao().deleteById(id)
+        }
+    }
+
+    fun setMedicationInvalid(id: Int) {
+        scope.launch {
+            AppDatabase.getDatabase(App.appContext).medicationDao().setMedicationInvalid(id)
+        }
+    }
+
+    suspend fun createMedicationData(
+        title: String,
+        description: String,
+        time: Long
+    ): MedicationData? {
+        return withContext(Dispatchers.IO) {
+            val medicationData = MedicationData(
+                keyId = UUID.randomUUID().toString(),
+                userId = AppGlobalRepository.userName,
+                title = title,
+                description = description,
+                time = time,
+                isValid = 1
+            )
+            AppDatabase.getDatabase(App.appContext).medicationDao().insertMedication(medicationData)
+            return@withContext AppDatabase.getDatabase(App.appContext).medicationDao()
+                .queryMedicationWithKey(medicationData.keyId).getOrNull(0)
+        }
+    }
+}
