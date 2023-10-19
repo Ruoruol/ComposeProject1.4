@@ -74,6 +74,7 @@
         <activity
             android:name=".AirQualityActivity"
             android:exported="false" />
+        <activity android:name=".EmptyActivity"/>
     </application>
 
 </manifest>

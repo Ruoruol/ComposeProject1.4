@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.example.composeproject1.ui.MedicationListScreen
+import com.example.composeproject1.ui.WeTemplateScreen
 import com.example.composeproject1.ui.theme.ComposeProject1Theme
 import com.example.composeproject1.viewmodel.MedicationListEvent
 import com.example.composeproject1.viewmodel.MedicationListVm
@@ -15,7 +16,7 @@ class MedicationListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeProject1Theme {
+            WeTemplateScreen(topTitle = "提醒列表", clickBack = { finish() }) {
                 MedicationListScreen(
                     vm.list,
                     vm.invalidList,

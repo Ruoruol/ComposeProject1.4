@@ -5,11 +5,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import com.example.composeproject1.ui.MainScreen
+import com.example.composeproject1.ui.NavigationDrawer
+import com.example.composeproject1.ui.WeTemplateScreen
 import com.example.composeproject1.viewmodel.MainVm
 import com.example.composeproject1.viewmodel.MainEvent
 import com.example.composeproject1.ui.theme.ComposeProject1Theme
@@ -19,10 +22,14 @@ class AirQualityActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposeProject1Theme {
-                // A surface container using the 'background' color from the theme
+            // A surface container using the 'background' color from the theme
+            WeTemplateScreen("空氣品質", clickBack = {
+                finish()
+            }) {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = it),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     MainScreen(
@@ -35,6 +42,8 @@ class AirQualityActivity : ComponentActivity() {
                     )
                 }
             }
+
+
         }
         mainVm.dispatchEvent(MainEvent.Init)
     }
