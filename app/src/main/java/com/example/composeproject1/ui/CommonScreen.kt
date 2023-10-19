@@ -2,34 +2,33 @@ package com.example.composeproject1.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.DrawerValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.composeproject1.model.ResourceGlobalRepository
 import com.example.composeproject1.ui.theme.ComposeProject1Theme
+import kotlinx.coroutines.launch
 
 @Composable
 fun NavigationDrawer(
@@ -121,18 +121,18 @@ fun WeTemplateScreen(
     clickBack: () -> Unit,
     content: @Composable (paddingTop: Dp) -> Unit
 ) {
-    var isShow by remember {
-        mutableStateOf(false)
-    }
     ComposeProject1Theme {
-        val scaffoldState = rememberScaffoldState()
-        LaunchedEffect(key1 = isShow) {
-            if (isShow) {
-                scaffoldState.drawerState.open()
-            } else {
-                scaffoldState.drawerState.close()
-            }
-        }
+        val scaffoldState =
+            rememberScaffoldState(
+                drawerState = androidx.compose.material.rememberDrawerState(
+                    DrawerValue.Closed,
+                    confirmStateChange = {
+                        true
+                    }
+                )
+            )
+        val scope = rememberCoroutineScope()
+
         androidx.compose.material.Scaffold(
             scaffoldState = scaffoldState,
             modifier = Modifier.fillMaxWidth(),
@@ -140,14 +140,22 @@ fun WeTemplateScreen(
                 WeToolbar(title = topTitle, {
                     clickBack()
                 }) {
-                    isShow = true
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
                 }
             },
             drawerContent = {
                 NavigationDrawer(
                     modifier = Modifier,
                     stateChangedRequest = { show ->
-                        isShow = show
+                        scope.launch {
+                            if (show) {
+                                scaffoldState.drawerState.open()
+                            } else {
+                                scaffoldState.drawerState.close()
+                            }
+                        }
                     })
             }) {
             content(it.calculateTopPadding())
