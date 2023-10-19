@@ -26,6 +26,10 @@
             android:id="@+id/bt06"
             android:title="用藥提醒" />
 
+        <item
+            android:id="@+id/bt07"
+            android:title="提醒列表" />
+
 
 
 

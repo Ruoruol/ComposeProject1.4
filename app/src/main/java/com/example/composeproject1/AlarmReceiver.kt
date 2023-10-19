@@ -31,7 +31,7 @@ import java.util.UUID
 
 class AlarmReceiver : BroadcastReceiver() {
     private val NOTIFICATION_FLAG = 3
-    private val CHANNEL_ID = "用药通知"
+    private val CHANNEL_ID = "用藥通知"
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action.equals(TIMER_ACTION_REPEATING)) {

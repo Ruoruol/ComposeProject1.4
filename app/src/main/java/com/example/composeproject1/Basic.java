@@ -101,6 +101,11 @@ public class Basic extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(Basic.this, "用藥提醒", Toast.LENGTH_SHORT).show();
                     return true;
+                }else if (id == R.id.bt07) {
+                    Intent it = new Intent(Basic.this, MedicationListActivity.class);
+                    startActivity(it);
+                    Toast.makeText(Basic.this, "提醒列表", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
 
                 return false;

@@ -125,7 +125,7 @@ public class Task extends AsyncTask<String, Void, String> {
                     tv_show.setText(reason);
                 }
                 else{
-                    Toast.makeText(context, "查询失败",
+                    Toast.makeText(context, "查詢失敗",
                             Toast.LENGTH_LONG).show();
                     tv_show.setText("");
                 }
@@ -136,7 +136,7 @@ public class Task extends AsyncTask<String, Void, String> {
 
         }
         else {
-            Toast.makeText(context, "查询失败",
+            Toast.makeText(context, "查詢失敗",
                     Toast.LENGTH_LONG).show();
             tv_show.setText("");
         }

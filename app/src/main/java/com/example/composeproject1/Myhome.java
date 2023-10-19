@@ -198,6 +198,11 @@ public class Myhome extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(Myhome.this, "用藥提醒", Toast.LENGTH_SHORT).show();
                     return true;
+                } else if (id == R.id.bt07) {
+                    Intent it = new Intent(Myhome.this, MedicationListActivity.class);
+                    startActivity(it);
+                    Toast.makeText(Myhome.this, "提醒列表", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
 
 

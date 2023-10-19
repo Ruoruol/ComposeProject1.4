@@ -100,6 +100,13 @@ class Medications : AppCompatActivity() {
                     return@OnNavigationItemSelectedListener true
                 }
 
+                R.id.bt07 -> {
+                    val it = Intent(this@Medications, MedicationListActivity::class.java)
+                    startActivity(it)
+                    Toast.makeText(this@Medications, "提醒列表", Toast.LENGTH_SHORT).show()
+                    return@OnNavigationItemSelectedListener true
+                }
+
                 else -> false
             }
             b

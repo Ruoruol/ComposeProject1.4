@@ -84,7 +84,13 @@ public class AirQuality extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(AirQuality.this, "用藥提醒", Toast.LENGTH_SHORT).show();
                     return true;
+                } else if (id == R.id.bt07) {
+                    Intent it = new Intent(AirQuality.this, MedicationListActivity.class);
+                    startActivity(it);
+                    Toast.makeText(AirQuality.this, "提醒列表", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
+
                 return false;
             }
         });

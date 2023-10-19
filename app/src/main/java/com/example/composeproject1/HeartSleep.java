@@ -106,6 +106,11 @@ public class HeartSleep extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(HeartSleep.this, "用藥提醒", Toast.LENGTH_SHORT).show();
                     return true;
+                }else if (id == R.id.bt07) {
+                    Intent it = new Intent(HeartSleep.this, MedicationListActivity.class);
+                    startActivity(it);
+                    Toast.makeText(HeartSleep.this, "提醒列表", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
 
 
