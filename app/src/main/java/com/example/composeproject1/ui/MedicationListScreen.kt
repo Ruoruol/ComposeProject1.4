@@ -46,7 +46,7 @@ fun MedicationListScreen(
 
         }
         items(1) {
-            Text(text = "过期通知:", modifier = Modifier.padding(top = 14.dp))
+            Text(text = "過期通知:", modifier = Modifier.padding(top = 14.dp))
         }
         items(invalidList.size) {
             MedicationItem(
@@ -112,7 +112,7 @@ fun MedicationItem(
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }) {
-                Text(text = "删除")
+                Text(text = "刪除")
             }
 
         }
