@@ -9,13 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import androidx.core.content.ContextCompat
+import com.example.composeproject1.model.ResourceGlobalRepository
 import com.example.composeproject1.ui.MainScreen
-import com.example.composeproject1.ui.NavigationDrawer
 import com.example.composeproject1.ui.WeTemplateScreen
-import com.example.composeproject1.viewmodel.MainVm
 import com.example.composeproject1.viewmodel.MainEvent
-import com.example.composeproject1.ui.theme.ComposeProject1Theme
+import com.example.composeproject1.viewmodel.MainVm
 
 class AirQualityActivity : ComponentActivity() {
     private val mainVm by viewModels<MainVm>()
@@ -23,9 +21,12 @@ class AirQualityActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             // A surface container using the 'background' color from the theme
-            WeTemplateScreen("空氣品質", clickBack = {
-                finish()
-            }) {
+            WeTemplateScreen(
+                "空氣品質",
+                defaultIndex = ResourceGlobalRepository.getIndexByName("空氣品質"),
+                clickBack = {
+                    finish()
+                }) {
                 Surface(
                     modifier = Modifier
                         .fillMaxSize()

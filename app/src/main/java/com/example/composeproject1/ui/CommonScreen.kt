@@ -58,6 +58,7 @@ import kotlin.io.path.fileVisitor
 @Composable
 fun NavigationDrawer(
     modifier: Modifier,
+    defaultIndex: Int = -1,
     stateChangedRequest: (Boolean) -> Unit,
 ) {
     Box {
@@ -76,8 +77,8 @@ fun NavigationDrawer(
             val list = remember {
                 ResourceGlobalRepository.getDrawableDataList()
             }
-            var selectIndex by remember {
-                mutableIntStateOf(-1)
+            var selectIndex by remember(defaultIndex) {
+                mutableIntStateOf(defaultIndex)
             }
             val context = LocalContext.current
             list.forEachIndexed { index, it ->
@@ -177,6 +178,7 @@ fun WeToolbar(title: String, clickBack: () -> Unit, clickAction: () -> Unit) {
 @Composable
 fun WeTemplateScreen(
     topTitle: String,
+    defaultIndex: Int = -1,
     clickBack: () -> Unit,
     content: @Composable (paddingTop: Dp) -> Unit
 ) {
@@ -207,6 +209,7 @@ fun WeTemplateScreen(
             drawerContent = {
                 NavigationDrawer(
                     modifier = Modifier,
+                    defaultIndex = defaultIndex,
                     stateChangedRequest = { show ->
                         scope.launch {
                             if (show) {

@@ -53,6 +53,8 @@ object ResourceGlobalRepository {
         )
     )
 
-
+    fun getIndexByName(name: String): Int {
+        return DRAWER_LIST.indexOfFirst { it.title == name }
+    }
     fun getDrawableDataList() = DRAWER_LIST.toList()
 }
