@@ -217,6 +217,7 @@ fun HomeToolbar(title: String, clickDrawShow: () -> Unit, clickLoginOut: () -> U
 @Composable
 fun WeTemplateScreen(
     defaultIndex: Int = -1,
+    drawerGesturesEnabled: Boolean = true,
     scaffoldState: ScaffoldState,
     topBarContent: @Composable () -> Unit,
     content: @Composable (paddingTop: Dp) -> Unit,
@@ -230,6 +231,7 @@ fun WeTemplateScreen(
             topBar = {
                 topBarContent()
             },
+            drawerGesturesEnabled = drawerGesturesEnabled,
             drawerContent = {
                 NavigationDrawer(
                     modifier = Modifier,
@@ -304,6 +306,7 @@ fun HomeTemplateScreen(
     WeTemplateScreen(
         defaultIndex = defaultIndex,
         scaffoldState = scaffoldState,
+        drawerGesturesEnabled = false,
         topBarContent = {
             HomeToolbar(
                 title = topTitle,
