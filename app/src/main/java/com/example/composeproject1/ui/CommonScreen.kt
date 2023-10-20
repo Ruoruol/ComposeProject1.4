@@ -64,7 +64,11 @@ fun NavigationDrawer(
         val context = LocalContext.current
         list.forEach {
             DrawerItem(text = it.title) {
-                context.startActivity(Intent(context, it.targetClazz))
+                context.startActivity(Intent(context, it.targetClazz).apply {
+                    if (it.flags != null) {
+                        flags = it.flags
+                    }
+                })
                 stateChangedRequest(false)
             }
         }

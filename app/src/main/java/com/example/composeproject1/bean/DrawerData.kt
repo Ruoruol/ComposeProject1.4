@@ -4,5 +4,6 @@ import android.app.Activity
 
 data class DrawerData(
     val title: String,
-    val targetClazz: Class<out Activity>
+    val targetClazz: Class<out Activity>,
+    val flags: Int? = null
 )
