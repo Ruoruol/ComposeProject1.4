@@ -16,9 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DrawerValue
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material.rememberScaffoldState
@@ -47,6 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.composeproject1.bean.DrawerData
 import com.example.composeproject1.model.ResourceGlobalRepository
 import com.example.composeproject1.ui.theme.ComposeProject1Theme
@@ -174,37 +177,58 @@ fun WeToolbar(title: String, clickBack: () -> Unit, clickAction: () -> Unit) {
     )
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeToolbar(title: String, clickDrawShow: () -> Unit, clickLoginOut: () -> Unit) {
+    CenterAlignedTopAppBar(
+        title = { Text(text = title, color = Color.Black) },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.primary,
+        ),
+        navigationIcon = {
+            IconButton(onClick = {
+                clickLoginOut.invoke()
+            }) {
+                IconButton(onClick = { clickDrawShow.invoke() }) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Localized description",
+                        tint = Color.White
+                    )
+                }
+            }
+        },
+        actions = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { clickLoginOut() }) {
+                Text(text = "登出", color = Color.White, fontSize = 20.sp)
+                Icon(
+                    imageVector = Icons.Filled.Logout,
+                    contentDescription = "Localized description",
+                    tint = Color.White
+                )
+            }
+        }
+    )
+}
+
 @Composable
 fun WeTemplateScreen(
-    topTitle: String,
     defaultIndex: Int = -1,
-    clickBack: () -> Unit,
-    content: @Composable (paddingTop: Dp) -> Unit
+    scaffoldState: ScaffoldState,
+    topBarContent: @Composable () -> Unit,
+    content: @Composable (paddingTop: Dp) -> Unit,
 ) {
     ComposeProject1Theme {
-        val scaffoldState =
-            rememberScaffoldState(
-                drawerState = androidx.compose.material.rememberDrawerState(
-                    DrawerValue.Closed,
-                    confirmStateChange = {
-                        true
-                    }
-                )
-            )
         val scope = rememberCoroutineScope()
 
         androidx.compose.material.Scaffold(
             scaffoldState = scaffoldState,
             modifier = Modifier.fillMaxWidth(),
             topBar = {
-                WeToolbar(title = topTitle, {
-                    clickBack()
-                }) {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
-                    }
-                }
+                topBarContent()
             },
             drawerContent = {
                 NavigationDrawer(
@@ -223,7 +247,78 @@ fun WeTemplateScreen(
             content(it.calculateTopPadding())
         }
     }
+}
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun WeTemplateScreen(
+    topTitle: String,
+    defaultIndex: Int = -1,
+    clickBack: () -> Unit,
+    content: @Composable (paddingTop: Dp) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val scaffoldState =
+        rememberScaffoldState(
+            drawerState = androidx.compose.material.rememberDrawerState(
+                DrawerValue.Closed,
+                confirmStateChange = {
+                    true
+                }
+            )
+        )
+    WeTemplateScreen(
+        defaultIndex = defaultIndex,
+        scaffoldState = scaffoldState,
+        topBarContent = {
+            WeToolbar(title = topTitle, {
+                clickBack()
+            }) {
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            }
+        },
+        content = content
+    )
+
+}
+
+@Composable
+fun HomeTemplateScreen(
+    topTitle: String,
+    defaultIndex: Int = -1,
+    clickLoginOut: () -> Unit,
+    content: @Composable (paddingTop: Dp) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    val scaffoldState =
+        rememberScaffoldState(
+            drawerState = androidx.compose.material.rememberDrawerState(
+                DrawerValue.Closed,
+                confirmStateChange = {
+                    true
+                }
+            )
+        )
+    WeTemplateScreen(
+        defaultIndex = defaultIndex,
+        scaffoldState = scaffoldState,
+        topBarContent = {
+            HomeToolbar(
+                title = topTitle,
+                clickDrawShow = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+                },
+                clickLoginOut = {
+                    clickLoginOut()
+                }
+            )
+        },
+        content = content
+    )
 }
 
 @Composable

@@ -1,6 +1,6 @@
 package com.example.composeproject1;
 
-class People {
+public class People {
      String tall,weight,BMI;
 
 
