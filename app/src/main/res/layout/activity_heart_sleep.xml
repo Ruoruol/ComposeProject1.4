@@ -1,100 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".HeartSleep">
+    android:orientation="vertical">
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="5dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/bpm_label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ToolbarTheme"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:titleTextAppearance="@style/TitleTextSize" />
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="BPM:"
+            android:textSize="24sp" />
 
-        <RelativeLayout
+        <TextView
+            android:id="@+id/bpm_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/bpm_label"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="56sp" />
+
+        <!-- Sleep Quality -->
+        <TextView
+            android:id="@+id/sleep_quality_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bpm_label"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Sleep Quality:"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/sleep_quality_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/sleep_quality_label"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="UNKNOWN"
+            android:textSize="32sp" />
+
+        <!-- Line Chart -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/bpm_history_chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dp">
-            <TextView
-                android:id="@+id/bpm_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="BPM:"
-                android:textSize="24sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"/>
-
-            <TextView
-                android:id="@+id/bpm_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="56sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_alignBaseline="@id/bpm_label"
-                android:layout_alignParentEnd="true"/>
-
-            <!-- Sleep Quality -->
-            <TextView
-                android:id="@+id/sleep_quality_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sleep Quality:"
-                android:textSize="24sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_below="@id/bpm_label"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:id="@+id/sleep_quality_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="UNKNOWN"
-                android:textSize="32sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_alignBaseline="@id/sleep_quality_label"
-                android:layout_alignParentEnd="true"/>
-
-            <!-- Line Chart -->
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/bpm_history_chart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/sleep_quality_label"
-                android:layout_marginTop="100dp"
-                android:layout_marginBottom="80dp" />
+            android:layout_below="@id/sleep_quality_label"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="80dp" />
 
 
-        </RelativeLayout>
+    </RelativeLayout>
 
-    </LinearLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nav_view3"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/navigation_menu" />
-
-
-</androidx.drawerlayout.widget.DrawerLayout>
+</LinearLayout>
