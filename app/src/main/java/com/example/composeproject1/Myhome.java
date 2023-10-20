@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.InputFilter;
 import android.text.LoginFilter;
 import android.text.TextUtils;
@@ -63,6 +65,7 @@ public class Myhome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         final Intent intent = getIntent();
         Log.i("alarm_receiver_log", "onCreate ");
         if (intent != null) {

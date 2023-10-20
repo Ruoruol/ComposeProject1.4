@@ -17,6 +17,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.composeproject1.AlarmTimer.TIMER_ACTION
 import com.example.composeproject1.databinding.ActivityMedicationsBinding
 import com.example.composeproject1.model.DatabaseRepository
+import com.example.composeproject1.utils.AlarmPermissionHelper
+import com.example.composeproject1.utils.ToastUtils
+import com.example.composeproject1.utils.requestAlarmPermission
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
 import java.sql.Date
@@ -31,6 +34,7 @@ class Medications : AppCompatActivity() {
     companion object {
         const val NOTIFICATION_PERMISSION_REQUEST_CODE = 123
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,30 +152,38 @@ class Medications : AppCompatActivity() {
             )
 
             .setPositiveButton("確定!") { _, _ ->
-                lifecycleScope.launch {
-                    val data = DatabaseRepository.createMedicationData(title, message, time)
-                    if (data != null) {
-                        val isSuccess = AlarmTimer.setAlarmTimer(
-                            this@Medications,
-                            data.id,
-                            title,
-                            message,
-                            time,
-                            TIMER_ACTION,
-                            AlarmManager.RTC_WAKEUP
-                        )
-                        if (isSuccess) {
-                            Toast.makeText(this@Medications, "新增成功", Toast.LENGTH_SHORT).show()
-                            finish()
-                        } else {
-                            Toast.makeText(
-                                this@Medications,
-                                "新增失敗,不能进行通知",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                requestAlarmPermission(this) {
+                    if (it) {
+                        lifecycleScope.launch {
+                            val data = DatabaseRepository.createMedicationData(title, message, time)
+                            if (data != null) {
+                                val isSuccess = AlarmTimer.setAlarmTimer(
+                                    this@Medications,
+                                    data.id,
+                                    title,
+                                    message,
+                                    time,
+                                    TIMER_ACTION,
+                                    AlarmManager.RTC_WAKEUP
+                                )
+                                if (isSuccess) {
+                                    Toast.makeText(this@Medications, "新增成功", Toast.LENGTH_SHORT)
+                                        .show()
+                                    finish()
+                                } else {
+                                    Toast.makeText(
+                                        this@Medications,
+                                        "新增失敗,不能进行通知",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } else {
+                                Toast.makeText(this@Medications, "数据库新增失敗", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
-                    } else {
-                        Toast.makeText(this@Medications, "新增失敗", Toast.LENGTH_SHORT).show()
+                    }else{
+                        ToastUtils.shortToast("没有闹钟权限,无法进行提醒")
                     }
                 }
 
@@ -190,7 +202,7 @@ class Medications : AppCompatActivity() {
         val year = binding.datePicker.year
 
         val calendar = Calendar.getInstance()
-        calendar.set(year, month, day, hour, minute,0)
+        calendar.set(year, month, day, hour, minute, 0)
         return calendar.timeInMillis
     }
 

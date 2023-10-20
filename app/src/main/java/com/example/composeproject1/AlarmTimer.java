@@ -9,10 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.example.composeproject1.model.AppGlobalRepository;
 import com.example.composeproject1.model.DatabaseRepository;
-
-import kotlin.random.Random;
 
 public class AlarmTimer {
     // 周期性的闹钟
@@ -52,7 +49,7 @@ public class AlarmTimer {
      *                         AlarmManager.RTC_WAKEUP、AlarmManager.POWER_OFF_WAKEUP
      */
     public static boolean setAlarmTimer(Context context, int requestId, String title, String desc, long cycTime,
-                                     String action, int AlarmManagerType) {
+                                        String action, int AlarmManagerType) {
         Log.i("alarm_receiver_log", "start " + requestId);
 
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
@@ -66,7 +63,7 @@ public class AlarmTimer {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarm.canScheduleExactAlarms()) {
             alarm.setExactAndAllowWhileIdle(AlarmManagerType, cycTime, sender);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -87,4 +84,5 @@ public class AlarmTimer {
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(sender);
     }
+
 }
