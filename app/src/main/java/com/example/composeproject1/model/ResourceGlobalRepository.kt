@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.AlarmAdd
 import androidx.compose.material.icons.filled.Bedtime
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MedicalServices
+import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Person2
 import com.example.composeproject1.AirQualityActivity
 import com.example.composeproject1.EmptyActivity
@@ -38,7 +39,7 @@ object ResourceGlobalRepository {
         ),
         DrawerData(
             "心律睡眠",
-            imageVector = Icons.Default.Bedtime,
+            imageVector = Icons.Default.ModeNight,
             targetClazz = HeartSleep::class.java
         ),
         DrawerData(

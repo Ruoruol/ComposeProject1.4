@@ -51,7 +51,9 @@ import com.example.composeproject1.bean.DrawerData
 import com.example.composeproject1.model.ResourceGlobalRepository
 import com.example.composeproject1.ui.theme.ComposeProject1Theme
 import com.example.composeproject1.ui.theme.PrimaryColor
+import com.example.composeproject1.ui.theme.SelectColor
 import kotlinx.coroutines.launch
+import kotlin.io.path.fileVisitor
 
 @Composable
 fun NavigationDrawer(
@@ -117,16 +119,22 @@ fun DrawerItem(drawerData: DrawerData, isSelect: Boolean, click: () -> Unit) {
                 click.invoke()
             }
             .padding(start = 16.dp, end = 6.dp)
-            .run { if (isSelect) background(PrimaryColor, CircleShape) else this }
+            .run { if (isSelect) background(SelectColor, CircleShape) else this }
             .padding(start = 8.dp)
 
     ) {
-        IconButton(onClick = {}) {
-            Icon(imageVector = drawerData.imageVector, contentDescription = "")
+        IconButton(onClick = { click.invoke() }) {
+            Icon(
+                imageVector = drawerData.imageVector,
+                contentDescription = "",
+                tint = if (isSelect) PrimaryColor else Color.Black
+            )
         }
         Spacer(modifier = Modifier.width(14.dp))
         Text(
-            text = drawerData.title, color = Color.Black, modifier = Modifier
+            text = drawerData.title,
+            color = if (isSelect) PrimaryColor else Color.Black,
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 10.dp)
         )
