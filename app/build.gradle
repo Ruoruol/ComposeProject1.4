@@ -79,4 +79,6 @@ dependencies {
 
     // To use Kotlin Symbol Processing (KSP)
     ksp "androidx.room:room-compiler:$room_version"
+
+    implementation 'androidx.compose.material:material-icons-extended'
 }
