@@ -5,8 +5,7 @@ import com.example.composeproject1.App
 
 object ToastUtils {
     fun shortToast(msg: String) {
-        val b=1
-        val a=1
+
         Toast.makeText(App.appContext, msg, Toast.LENGTH_SHORT).show()
     }
 }
