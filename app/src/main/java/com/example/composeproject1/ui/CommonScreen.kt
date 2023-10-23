@@ -98,7 +98,7 @@ fun NavigationDrawer(
         ) {
             Icon(
                 imageVector = Icons.Default.MenuOpen,
-                contentDescription = "关闭",
+                contentDescription = "關閉",
                 tint = Color.White
             )
         }

@@ -89,11 +89,6 @@ class Myhome : AppCompatActivity() {
             }
         }
 
-
-//        sp = this.getSharedPreferences("username", this.MODE_PRIVATE);
-//        textView_name = this.findViewById(R.id.textView_name);
-//        textView_name.setText("欢迎你！"+sp.getString("Loginname",""));
-
     }
 
     private fun initView(binding: ActivityMainBinding) {

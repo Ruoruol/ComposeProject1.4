@@ -96,21 +96,21 @@ class Medications : AppCompatActivity() {
                                 } else {
                                     Toast.makeText(
                                         this@Medications,
-                                        "新增失敗,不能进行通知",
+                                        "新增失敗,不能進行通知",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             } else {
                                 Toast.makeText(
                                     this@Medications,
-                                    "数据库新增失敗",
+                                    "資料庫新增失敗",
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()
                             }
                         }
                     } else {
-                        ToastUtils.shortToast("没有闹钟权限,无法进行提醒")
+                        ToastUtils.shortToast("沒有鬧鐘權限,無法進行提醒")
                     }
                 }
 

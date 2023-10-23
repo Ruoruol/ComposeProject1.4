@@ -96,7 +96,7 @@ fun MedicationItem(
                 val timeFormat = DateFormat.getTimeFormat(App.appContext)
                 dateFormat.format(date) + " " + timeFormat.format(date)
             }
-            Text(text = "时间：${timeString}", modifier = Modifier.constrainAs(time) {
+            Text(text = "時間：${timeString}", modifier = Modifier.constrainAs(time) {
                 top.linkTo(desc.bottom)
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
