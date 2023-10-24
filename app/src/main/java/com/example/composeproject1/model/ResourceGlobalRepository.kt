@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AlarmAdd
 import androidx.compose.material.icons.filled.Bedtime
+import androidx.compose.material.icons.filled.BookmarkAdded
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.ModeNight
@@ -41,7 +42,7 @@ object ResourceGlobalRepository {
         DrawerData(
             "心律睡眠",
             imageVector = Icons.Default.ModeNight,
-            targetClazz = CalenderActivity::class.java
+            targetClazz = HeartSleep::class.java
         ),
         DrawerData(
             "用藥提醒",
@@ -51,11 +52,16 @@ object ResourceGlobalRepository {
         DrawerData(
             "提醒列表", imageVector = Icons.Default.AlarmAdd,
             targetClazz = MedicationListActivity::class.java
+        ),
+        DrawerData(
+            "行事曆", imageVector = Icons.Default.BookmarkAdded,
+            targetClazz = CalenderActivity::class.java
         )
     )
 
     fun getIndexByName(name: String): Int {
         return DRAWER_LIST.indexOfFirst { it.title == name }
     }
+
     fun getDrawableDataList() = DRAWER_LIST.toList()
 }

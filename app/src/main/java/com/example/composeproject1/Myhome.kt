@@ -104,11 +104,14 @@ class Myhome : AppCompatActivity() {
             startActivity(Intent(this@Myhome, AirQualityActivity::class.java))
         }
         binding.btHeartSleep.setOnClickListener {
-            startActivity(Intent(this@Myhome, CalenderActivity::class.java))
+            startActivity(Intent(this@Myhome, HeartSleep::class.java))
         }
 
         binding.btMedicationsList.setOnClickListener {
             startActivity(Intent(this@Myhome, MedicationListActivity::class.java))
+        }
+        binding.btHistory.setOnClickListener {
+            startActivity(Intent(this@Myhome, CalenderActivity::class.java))
         }
     }
 

@@ -71,6 +71,7 @@
                     android:textSize="60sp" />
 
                 <Button
+                    android:id="@+id/bt_history"
                     android:layout_width="360dp"
                     android:layout_height="200dp"
                     android:background="@drawable/rounded_button"
