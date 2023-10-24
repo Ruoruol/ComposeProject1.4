@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.MedicalServices
 import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Person2
 import com.example.composeproject1.AirQualityActivity
+import com.example.composeproject1.CalenderActivity
 import com.example.composeproject1.EmptyActivity
 import com.example.composeproject1.HeartSleep
 import com.example.composeproject1.MedicationListActivity
@@ -40,7 +41,7 @@ object ResourceGlobalRepository {
         DrawerData(
             "心律睡眠",
             imageVector = Icons.Default.ModeNight,
-            targetClazz = HeartSleep::class.java
+            targetClazz = CalenderActivity::class.java
         ),
         DrawerData(
             "用藥提醒",

@@ -75,6 +75,7 @@
             android:name=".AirQualityActivity"
             android:exported="false" />
         <activity android:name=".EmptyActivity"/>
+        <activity android:name=".CalenderActivity"/>
     </application>
 
 </manifest>
