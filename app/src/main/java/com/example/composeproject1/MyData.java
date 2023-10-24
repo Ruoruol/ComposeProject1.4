@@ -1,6 +1,6 @@
 package com.example.composeproject1;
 
-class MyData {
+public class MyData {
     int id;
     String date,item;
 

@@ -248,6 +248,7 @@ fun WeTemplateScreen(
 fun WeTemplateScreen(
     topTitle: String,
     defaultIndex: Int = -1,
+    drawerGesturesEnabled: Boolean = true,
     clickBack: () -> Unit,
     content: @Composable (paddingTop: Dp) -> Unit
 ) {
@@ -264,6 +265,7 @@ fun WeTemplateScreen(
     WeTemplateScreen(
         defaultIndex = defaultIndex,
         scaffoldState = scaffoldState,
+        drawerGesturesEnabled = drawerGesturesEnabled,
         topBarContent = {
             WeToolbar(title = topTitle, {
                 clickBack()
