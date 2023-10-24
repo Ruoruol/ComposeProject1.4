@@ -30,6 +30,10 @@
             android:id="@+id/bt07"
             android:title="提醒列表" />
 
+        <item
+            android:id="@+id/bt08"
+            android:title="行事曆" />
+
 
 
 

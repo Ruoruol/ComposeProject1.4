@@ -106,6 +106,11 @@ public class Basic extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(Basic.this, "提醒列表", Toast.LENGTH_SHORT).show();
                     return true;
+                }else if (id == R.id.bt08) {
+                    Intent it = new Intent(Basic.this, CalenderActivity.class);
+                    startActivity(it);
+                    Toast.makeText(Basic.this, "行事曆", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
 
                 return false;
