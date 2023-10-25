@@ -3,6 +3,7 @@ package com.example.composeproject1.model
 import com.example.composeproject1.App
 import com.example.composeproject1.database.AppDatabase
 import com.example.composeproject1.database.MedicationData
+import com.example.composeproject1.database.MyHistoryData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,6 +22,11 @@ object DatabaseRepository {
 
     fun getMedicationById(id: Int): MedicationData? {
         return AppDatabase.getDatabase(App.appContext).medicationDao().queryMedicationWithId(id)
+            .getOrNull(0)
+    }
+
+    fun getDataHistoryById(id: Int): MyHistoryData? {
+        return AppDatabase.getDatabase(App.appContext).myHistoryDao().fetchDataById(id)
             .getOrNull(0)
     }
 
@@ -53,6 +59,33 @@ object DatabaseRepository {
             AppDatabase.getDatabase(App.appContext).medicationDao().insertMedication(medicationData)
             return@withContext AppDatabase.getDatabase(App.appContext).medicationDao()
                 .queryMedicationWithKey(medicationData.keyId).getOrNull(0)
+        }
+    }
+
+    suspend fun createHistoryData(date: Long, time: String): MyHistoryData? {
+        return withContext(Dispatchers.IO) {
+            val key = UUID.randomUUID().toString()
+            val historyData = MyHistoryData(
+                key = key,
+                date = date,
+                item = time
+            )
+            AppDatabase.getDatabase(App.appContext).myHistoryDao().insertData(historyData)
+            return@withContext AppDatabase.getDatabase(App.appContext).myHistoryDao()
+                .fetchDataByKey(key).getOrNull(0)
+        }
+    }
+
+    suspend fun fetchHistoryDataList(start: Long, end: Long): List<MyHistoryData> {
+        return withContext(Dispatchers.IO) {
+            return@withContext AppDatabase.getDatabase(App.appContext).myHistoryDao()
+                .fetchDataListBetweenDate(start, end)
+        }
+    }
+
+    fun deleteHistoryData(data: MyHistoryData) {
+        scope.launch {
+            AppDatabase.getDatabase(App.appContext).myHistoryDao().deleteData(data)
         }
     }
 }

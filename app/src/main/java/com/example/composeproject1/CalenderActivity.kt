@@ -1,8 +1,10 @@
 package com.example.composeproject1
 
+import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,16 +15,27 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.remember
 import androidx.compose.ui.viewinterop.AndroidViewBinding
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.composeproject1.database.MyHistoryData
 import com.example.composeproject1.databinding.ActivityCalenderBinding
+import com.example.composeproject1.model.Constant
+import com.example.composeproject1.model.DatabaseRepository
+import com.example.composeproject1.model.DatabaseRepository.fetchHistoryDataList
 import com.example.composeproject1.model.ResourceGlobalRepository
 import com.example.composeproject1.ui.WeTemplateScreen
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.ref.Cleaner
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Collections
+import java.util.Calendar.HOUR_OF_DAY
+import java.util.Calendar.MINUTE
+import java.util.Calendar.SECOND
 import java.util.Date
 import java.util.Locale
 
@@ -33,7 +46,6 @@ class CalenderActivity : AppCompatActivity() {
     private var adapter: MyAdapter? = null
     private var itemList: MutableList<String>? = null
     var gson = Gson()
-    var fList = arrayListOf<MyData>()
 
     var database: SQLiteDatabaseHelper? = null
     private var selectedDate = "" // 用於保存日期
@@ -63,67 +75,105 @@ class CalenderActivity : AppCompatActivity() {
         recyclerView = binding.rcvList
         database = SQLiteDatabaseHelper(this, DB, null, 1)
         itemList = ArrayList()
-        adapter = MyAdapter(this, fList, selectedDate)
+        adapter = MyAdapter(this, arrayListOf(), selectedDate)
         recyclerView.setAdapter(adapter)
         recyclerView.setLayoutManager(LinearLayoutManager(this))
 
         // 設置 CalendarView 的日期選擇監聽器
         calendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth -> // 直接更新外部的 selectedDate 变量
-            selectedDate = formatDate(year, month, dayOfMonth)
-            val startDate = Calendar.getInstance()
-            startDate[year, month, dayOfMonth, 0, 0] = 0 // 设置时间为当天的开始时间
-            val endDate = Calendar.getInstance()
-            endDate[year, month, dayOfMonth, 23, 59] = 59 // 设置时间为当天的结束时间
-            fList = database!!.getMyDataByMonth(startDate, endDate)
-            adapter!!.pList = fList
-            adapter!!.notifyDataSetChanged()
+            dateChanged(year, month, dayOfMonth)
         })
+        calendarView.date = System.currentTimeMillis()
         // 根據按鈕點擊情況添加日期和按鈕文字
         binding.btFollowUp.setOnClickListener(View.OnClickListener {
             val appointmentType = "回診" // 預約類型為 "回診"
             addItem(appointmentType, selectedDate)
-            GetCurrentMonth()
+            //GetCurrentMonth()
         })
         binding.btReceiveMedicine.setOnClickListener(View.OnClickListener {
             val appointmentType = "拿藥" // 預約類型為 "回診"
             addItem(appointmentType, selectedDate)
-            GetCurrentMonth()
+            //  GetCurrentMonth()
         })
         binding.btRehabilitation.setOnClickListener(View.OnClickListener {
             val appointmentType = "復健" // 預約類型為 "回診"
             addItem(appointmentType, selectedDate)
-            GetCurrentMonth()
+            // GetCurrentMonth()
         })
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = calendarView.date
+        dateChanged(
+            calendar[Calendar.YEAR],
+            calendar[Calendar.MONTH],
+            calendar[Calendar.DAY_OF_MONTH]
+        )
+    }
+
+    private fun dateChanged(year: Int, month: Int, dayOfMonth: Int) {
+        selectedDate = formatDate(year, month, dayOfMonth)
+        val startDate = Calendar.getInstance()
+        startDate[year, month, dayOfMonth, 0, 0] = 0 // 设置时间为当天的开始时间
+        val endDate = Calendar.getInstance()
+        endDate[year, month, dayOfMonth, 23, 59] = 59 // 设置时间为当天的结束时间
+        lifecycleScope.launch {
+            val list = DatabaseRepository.fetchHistoryDataList(
+                startDate.timeInMillis,
+                endDate.timeInMillis
+            )
+            adapter!!.pList = list.toMutableList()
+            adapter!!.notifyDataSetChanged()
+        }
     }
 
     private fun addItem(newItem: String, selectedDate: String) {
         itemList!!.add(newItem)
 
         // 添加项目到数据库
-        database!!.addMyData(selectedDate, newItem)
+        lifecycleScope.launch {
+            // 設定 CalendarView 的選擇日期以跳轉到相關的月份
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val date: Date?
+            try {
+                date = dateFormat.parse(selectedDate)
+                if (date != null) {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = date
+                    calendar.set(HOUR_OF_DAY, 6)
+                    calendar.set(MINUTE, 0)
+                    calendar.set(SECOND, 0)
+                    val selectedDateInMillis = calendar.timeInMillis
 
-        // 設定 CalendarView 的選擇日期以跳轉到相關的月份
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-        val date: Date?
-        try {
-            date = dateFormat.parse(selectedDate)
-            if (date != null) {
-                val calendar = Calendar.getInstance()
-                calendar.time = date
-                val selectedDateInMillis = calendar.timeInMillis
-                calendarView!!.setDate(selectedDateInMillis, true, true)
+                    val data = DatabaseRepository.createHistoryData(selectedDateInMillis, newItem)
+                    if (data != null) {
+                        AlarmTimer.setAlarmTimer(
+                            this@CalenderActivity,
+                            data.id,
+                            Bundle().apply {
+                                putInt("type", Constant.TYPE_HISTORY)
+                                putString("title", newItem)
+                                putInt("id", data.id)
+                            },
+                            selectedDateInMillis,
+                            AlarmTimer.TIMER_ACTION,
+                            AlarmManager.RTC_WAKEUP
+                        )
+                    }
+                    calendarView.setDate(selectedDateInMillis, true, true)
+                }
+            } catch (e: ParseException) {
+                e.printStackTrace()
             }
-        } catch (e: ParseException) {
-            e.printStackTrace()
-        }
+            withContext(Dispatchers.Main.immediate) {
+                // 重新查询数据库以获取最新数据
+                this@CalenderActivity.selectedDate = selectedDate
+                GetCurrentMonth()
+            }
 
-        // 重新查询数据库以获取最新数据
-        GetCurrentMonth()
-        adapter!!.setItems(fList, selectedDate)
+        }
     }
 
     internal inner class MyAdapter(
-        var context: Context, var pList: ArrayList<MyData>, // 用於保存日期
+        var context: Context, var pList: MutableList<MyHistoryData>, // 用於保存日期
         var selectedDate: String
     ) : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
         // 創建新的 ViewHolder，並關聯 item_layout.xml 布局文件
@@ -134,23 +184,12 @@ class CalenderActivity : AppCompatActivity() {
 
         // 綁定數據到 ViewHolder 上
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-            // 使用逆序排列的方法，将数据按日期从大到小排序
-            Collections.sort(fList, Collections.reverseOrder(java.util.Comparator { item1, item2 ->
-                val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                try {
-                    val date1 = sdf.parse(item1.getDate())
-                    val date2 = sdf.parse(item2.getDate())
-                    if (date1 != null && date2 != null) {
-                        return@Comparator date1.compareTo(date2)
-                    }
-                } catch (e: ParseException) {
-                    e.printStackTrace()
-                }
-                0
-            }))
-            holder.tv_date.text = pList[position].date // 使用存储在数据对象中的日期
-            holder.tv_item.text = pList[position].item
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val item = pList[position]
+            holder.tv_date.text = sdf.format(Date(item.date).apply {
+                time
+            }) // 使用存储在数据对象中的日期
+            holder.tv_item.text = item.item
         }
 
         // 返回數據集的大小
@@ -158,7 +197,7 @@ class CalenderActivity : AppCompatActivity() {
             return pList.size
         }
 
-        fun setItems(items: ArrayList<MyData>, selectedDate: String) {
+        fun setItems(items: MutableList<MyHistoryData>, selectedDate: String) {
             pList = items
             this.selectedDate = selectedDate
             notifyDataSetChanged()
@@ -180,7 +219,7 @@ class CalenderActivity : AppCompatActivity() {
                     builder.setPositiveButton("Yes") { dialogInterface, i ->
                         val position = adapterPosition
                         val p = pList[position]
-                        database!!.deleteMyData(p)
+                        DatabaseRepository.deleteHistoryData(p)
                         pList.removeAt(position)
                         notifyDataSetChanged()
                         dialogInterface.dismiss()
@@ -212,11 +251,15 @@ class CalenderActivity : AppCompatActivity() {
             59
 
         // 获取数据
-        fList = database!!.getMyDataByMonth(startDate, endDate)
+        lifecycleScope.launch {
+            val list = fetchHistoryDataList(startDate.timeInMillis, endDate.timeInMillis)
+            withContext(Dispatchers.Main) {
+                // 更新适配器
+                adapter!!.setItems(list.toMutableList(), selectedDate)
+                recyclerView.smoothScrollToPosition(0) // 滚动到顶部
+            }
+        }
 
 
-        // 更新适配器
-        adapter!!.setItems(fList, selectedDate)
-        recyclerView.smoothScrollToPosition(0) // 滚动到顶部
     }
 }

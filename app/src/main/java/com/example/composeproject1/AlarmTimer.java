@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.example.composeproject1.model.DatabaseRepository;
@@ -48,16 +49,14 @@ public class AlarmTimer {
      *                         AlarmManager.ELAPSED_REALTIME_WAKEUP、AlarmManager.RTC、
      *                         AlarmManager.RTC_WAKEUP、AlarmManager.POWER_OFF_WAKEUP
      */
-    public static boolean setAlarmTimer(Context context, int requestId, String title, String desc, long cycTime,
+    public static boolean setAlarmTimer(Context context, int requestId, Bundle bundle, long cycTime,
                                         String action, int AlarmManagerType) {
         Log.i("alarm_receiver_log", "start " + requestId);
 
         Intent alarmIntent = new Intent(context, AlarmReceiver.class);
+        alarmIntent.putExtras(bundle);
         alarmIntent.setAction(action);
-        alarmIntent.putExtra("cancel", false);
-        alarmIntent.putExtra("id", requestId);
-        alarmIntent.putExtra("title", title);
-        alarmIntent.putExtra("desc", desc);
+
         PendingIntent sender = PendingIntent.getBroadcast(context, requestId, alarmIntent, FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarm.canScheduleExactAlarms()) {

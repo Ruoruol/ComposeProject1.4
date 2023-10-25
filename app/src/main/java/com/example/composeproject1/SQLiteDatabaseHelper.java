@@ -51,68 +51,7 @@ public class SQLiteDatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_C, null, values);
     }
 
-    public ArrayList<MyData> getAllMyData() {
-        ArrayList<MyData> peopleList = new ArrayList<MyData>();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_C;
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                MyData p = new MyData(
-                        Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1),
-                        cursor.getString(2)
-
-                );
-                peopleList.add(p);
-            } while (cursor.moveToNext());
-        }
-        return peopleList;
-    }
-
-    public ArrayList<MyData> getMyDataByMonth(Calendar year, Calendar month) {
-        ArrayList<MyData> dataList = new ArrayList<>();
-
-        int yearValue = year.get(Calendar.YEAR);
-        int monthValue = month.get(Calendar.MONTH) + 1; // Calendar 中的月份是从 0 开始的，所以要加 1
-
-        // 构建查询条件
-        String startDate = String.format("%04d-%02d-01", yearValue, monthValue);
-        String endDate = String.format("%04d-%02d-31", yearValue, monthValue);
-
-        String selectQuery = "SELECT * FROM " + TABLE_C +
-                " WHERE " + DATE + " BETWEEN '" + startDate + "' AND '" + endDate + "'";
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                MyData p = new MyData(
-                        Integer.parseInt(cursor.getString(0)),
-                        cursor.getString(1),
-                        cursor.getString(2)
-                );
-                dataList.add(p);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-
-        return dataList;
-    }
-
-
-
-    public void deleteMyData(MyData mydata) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_C, ID + " = ?",
-                new String[]{String.valueOf(mydata.id)});
-
-    }
 
 
 }

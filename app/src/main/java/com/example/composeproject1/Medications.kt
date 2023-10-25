@@ -9,12 +9,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.runtime.remember
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.lifecycle.lifecycleScope
 import com.example.composeproject1.AlarmTimer.TIMER_ACTION
 import com.example.composeproject1.databinding.ActivityMedicationsBinding
+import com.example.composeproject1.model.Constant.TYPE_MEDICATION
 import com.example.composeproject1.model.DatabaseRepository
 import com.example.composeproject1.model.ResourceGlobalRepository.getIndexByName
 import com.example.composeproject1.ui.WeTemplateScreen
@@ -80,11 +80,17 @@ class Medications : AppCompatActivity() {
                         lifecycleScope.launch {
                             val data = DatabaseRepository.createMedicationData(title, message, time)
                             if (data != null) {
+                                val bundle = Bundle().apply {
+                                    putString("title", title)
+                                    putInt("id", data.id)
+                                    putString("desc", message)
+                                    putLong("time", time)
+                                    putInt("type",TYPE_MEDICATION)
+                                }
                                 val isSuccess = AlarmTimer.setAlarmTimer(
                                     this@Medications,
                                     data.id,
-                                    title,
-                                    message,
+                                    bundle,
                                     time,
                                     TIMER_ACTION,
                                     AlarmManager.RTC_WAKEUP
