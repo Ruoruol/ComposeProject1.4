@@ -1,103 +1,170 @@
 package com.example.composeproject1;
 
-import android.content.Context;
-import android.graphics.Color;
+import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.github.mikephil.charting.formatter.ValueFormatter;
+import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
+import com.google.gson.Gson;
 
-public class LineChartData {
-    Context context;
-    LineChart lineChart;
+import java.util.Calendar;
 
-    public LineChartData(LineChart lineChart, Context context) {
-        this.context = context;
-        this.lineChart = lineChart;
-    }
+public class LineChartData extends AppCompatActivity {
 
-    public void initDataSet(ArrayList<Entry> valuesY) {
-        if (valuesY.size() > 0) {
-            for (int i = 0; i < valuesY.size(); i++) {
-                final LineDataSet set;
-                set = new LineDataSet(valuesY, "");
-                set.setMode(LineDataSet.Mode.LINEAR);//類型為折線
-                set.setColor(context.getResources().getColor(R.color.teal_700));//線的顏色
-                set.setCircleColor(context.getResources().getColor(R.color.teal_700));//圓點顏色
-                set.setCircleRadius(4);//圓點大小
-                set.setDrawCircleHole(false);//圓點為實心(預設空心)
-                set.setLineWidth(1.5f);//線寬
-                set.setDrawValues(true);//顯示座標點對應Y軸的數字(預設顯示)
-                set.setValueTextSize(15);//座標點數字大小
+    EditText et_high, et_low, et_hb;
+    TextView tv_time;
 
-                Legend legend = lineChart.getLegend();
-                legend.setEnabled(false);//不顯示圖例 (預設顯示)
-                Description description = lineChart.getDescription();
-                description.setEnabled(false);//不顯示Description Label (預設顯示)
+    Spinner spinner;
+    String[] time = {"早上", "中午", "晚上"};
 
-                LineData data = new LineData(set);
-                lineChart.setData(data);//一定要放在最後
+    Button bt_save, bt_Cancel, bt_date;
+    Gson gson = new Gson();
+    DBHelper database;
+    Calendar calendar;
+    String selectedDate;
+    String action = "";
+    int id = -1;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_linechart);
+
+        // 初始化视图组件
+        et_high = findViewById(R.id.et_high);
+        et_low = findViewById(R.id.et_low);
+        et_hb = findViewById(R.id.et_hb);
+        spinner = findViewById(R.id.spinner);
+        bt_save = findViewById(R.id.bt_save);
+        bt_Cancel = findViewById(R.id.bt_Cancel);
+        bt_date = findViewById(R.id.bt_date);
+        tv_time = findViewById(R.id.tv_time);
+        long user_id = getIntent().getLongExtra("user_id", -1);
+
+        ArrayAdapter adapter = new ArrayAdapter(this, R.layout.sp_time, time);
+        spinner.setAdapter(adapter);
+        database = new DBHelper(this);
+
+        Intent it = getIntent();
+        action = it.getStringExtra("action");
+        if (action.equals(Action.EDIT)) {
+            String json = it.getStringExtra("json");
+            MyData p = gson.fromJson(json, MyData.class);
+            id = p.id;
+            user_id = p.user_id;  // 获取用户的 ID
+            spinner.getSelectedItem();
+            et_high.setText(p.high);
+            et_low.setText(p.low);
+            et_hb.setText(p.hb);
+            tv_time.setText(p.date);
+        }
+
+
+        // 设置保存按钮的点击事件
+        long finalUser_id = user_id;
+        bt_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String date = selectedDate;
+                String high = et_high.getText().toString();
+                String low = et_low.getText().toString();
+                String heartRate = et_hb.getText().toString();
+                String item = spinner.getSelectedItem().toString();
+                if (action.equals(Action.NEW)) {
+                    id = -1;
+                }
+                MyData p = new MyData(id, date, high, low, heartRate, item, finalUser_id);
+                String json = gson.toJson(p);
+                Intent it = new Intent();
+                it.putExtra("json", json);
+                setResult(RESULT_OK, it);
+
+                finish();
             }
-        } else {
-            lineChart.setNoDataText("暫時沒有數據");
-            lineChart.setNoDataTextColor(Color.BLUE);//文字顏色
+        });
+
+        bt_Cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent();
+                it.putExtra("action", Action.CANCEL);
+                setResult(RESULT_CANCELED, it);
+                finish();
+            }
+        });
+
+
+        calendar = Calendar.getInstance();
+        selectedDate = getCurrentDate();
+
+
+        bt_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(LineChartData.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                                calendar.set(Calendar.YEAR, year);
+                                calendar.set(Calendar.MONTH, month);
+                                calendar.set(Calendar.DAY_OF_MONTH, day);
+                                selectedDate = getCurrentDate();
+                                tv_time.setText(selectedDate);
+                            }
+                        },
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+
+                datePickerDialog.show();
+            }
+        });
+    }
+
+    private String getCurrentDate() {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        // 獲取星期
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month - 1, day);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);//星期
+        String dayOfWeekString = getDayOfWeekString(dayOfWeek);
+
+        return String.format("%04d-%02d-%02d (%s)", year, month, day, dayOfWeekString);
+    }
+
+    private String getDayOfWeekString(int dayOfWeek) {
+        switch (dayOfWeek) {
+            case Calendar.SUNDAY:
+                return "星期日";
+            case Calendar.MONDAY:
+                return "星期一";
+            case Calendar.TUESDAY:
+                return "星期二";
+            case Calendar.WEDNESDAY:
+                return "星期三";
+            case Calendar.THURSDAY:
+                return "星期四";
+            case Calendar.FRIDAY:
+                return "星期五";
+            case Calendar.SATURDAY:
+                return "星期六";
+            default:
+                return "";
         }
-        lineChart.invalidate();//繪製圖表
+
     }
 
-    public void initX(ArrayList dateList) {
-        XAxis xAxis = lineChart.getXAxis();
-
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//X軸標籤顯示位置(預設顯示在上方，分為上方內/外側、下方內/外側及上下同時顯示)
-        xAxis.setTextColor(Color.GRAY);//X軸標籤顏色
-        xAxis.setTextSize(12);//X軸標籤大小
-
-        xAxis.setLabelCount(dateList.size());//X軸標籤個數
-        xAxis.setSpaceMin(0.5f);//折線起點距離左側Y軸距離
-        xAxis.setSpaceMax(0.5f);//折線終點距離右側Y軸距離
-
-        xAxis.setDrawGridLines(false);//不顯示每個座標點對應X軸的線 (預設顯示)
-
-        xAxis.setValueFormatter(new IndexAxisValueFormatter(dateList));
-    }
-
-    public void initY(Float min, Float max) {
-        YAxis rightAxis = lineChart.getAxisRight();//獲取右側的軸線
-        rightAxis.setEnabled(false);//不顯示右側Y軸
-        YAxis leftAxis = lineChart.getAxisLeft();//獲取左側的軸線
-
-        leftAxis.setLabelCount(3);//Y軸標籤個數
-        leftAxis.setTextColor(Color.GRAY);//Y軸標籤顏色
-        leftAxis.setTextSize(12);//Y軸標籤大小
-
-        leftAxis.setAxisMinimum(min + 50);//Y軸標籤最小值
-        leftAxis.setAxisMaximum(max + 100);//Y軸標籤最大值
-
-        leftAxis.setValueFormatter(new MyYAxisValueFormatter());
-    }
-
-    class MyYAxisValueFormatter extends ValueFormatter {
-
-        private DecimalFormat mFormat;
-
-        public MyYAxisValueFormatter() {
-            mFormat = new DecimalFormat("###,###.0");//Y軸數值格式及小數點位數
-        }
-
-        @Override
-        public String getFormattedValue(float value, AxisBase axis) {
-            return mFormat.format(value);
-        }
-    }
 }
