@@ -24,7 +24,7 @@ class HeartSleep : AppCompatActivity() {
                 ResourceGlobalRepository.getIndexByName("心律睡眠")
             }, clickBack = { finish() }) {
                 AndroidViewBinding(ActivityHeartSleepBinding::inflate) {
-                    val lineChartData = LineChartData(bpmHistoryChart, this@HeartSleep)
+                    val lineChartData = LineChartDataView(bpmHistoryChart, this@HeartSleep)
                     for (i in 0..4) {
                         val randomValue = random.nextInt(31) + 70 // 生成70到100之间的随机整数
                         xData.add("第" + (i + 1) + "筆")
