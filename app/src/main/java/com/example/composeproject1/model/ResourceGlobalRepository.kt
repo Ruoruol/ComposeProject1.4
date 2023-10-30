@@ -44,7 +44,7 @@ object ResourceGlobalRepository {
         DrawerData(
             "心律睡眠",
             imageVector = Icons.Default.ModeNight,
-            targetClazz = LineChartData::class.java
+            targetClazz = BloodPressure::class.java
         ),
         DrawerData(
             "用藥提醒",
