@@ -74,7 +74,6 @@ class BloodPressure : AppCompatActivity() {
                     this@BloodPressure.calendarView = calendarView
                     val userId = AppGlobalRepository.userId // -1是預設值，表示沒有傳遞學生ID時的情況
                     database = DBHelper(this@BloodPressure)
-                    fList = database!!.allHBData
                     rcv.setLayoutManager(LinearLayoutManager(this@BloodPressure))
                     rcvAdapter = RCVAdapter(this@BloodPressure, fList)
                     rcv.setAdapter(rcvAdapter)
@@ -107,8 +106,11 @@ class BloodPressure : AppCompatActivity() {
                         updateLineChart(entryPair.first, entryPair.second)
                     })
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val data=database!!.allHBData
-                        withContext(Dispatchers.Main){
+                        val data = database!!.getAllHBDataByUserId(AppGlobalRepository.userId)
+                        withContext(Dispatchers.Main) {
+                            fList.clear()
+                            fList.addAll(data)
+                            rcvAdapter?.notifyDataSetChanged()
                             updateLineChat(data)
                         }
                     }
@@ -161,8 +163,6 @@ class BloodPressure : AppCompatActivity() {
                     val json = data!!.getStringExtra("json")
                     val p = gson.fromJson(json, MyData::class.java)
                     database!!.updateHBData(p)
-                    rcvAdapter!!.pList = database!!.allHBData
-                    rcvAdapter!!.notifyDataSetChanged()
                     updateLineChartForCurrentMonth()
                 }
             }
@@ -363,37 +363,44 @@ class BloodPressure : AppCompatActivity() {
     }
 
     private fun updateLineChartForCurrentMonth() {
-        // 获取当前选定的日期
-        val selectedDate = calendarView!!.date
-        val selectedCalendar = Calendar.getInstance()
-        selectedCalendar.timeInMillis = selectedDate
+        lifecycleScope.launch(Dispatchers.IO) {
+            val data = database!!.getAllHBDataByUserId(AppGlobalRepository.userId)
+            withContext(Dispatchers.Main) {
+                // 获取当前选定的日期
+                val selectedDate = calendarView!!.date
+                val selectedCalendar = Calendar.getInstance()
+                selectedCalendar.timeInMillis = selectedDate
 
-        // 计算当前选定月份的开始和结束日期
-        val startDate = Calendar.getInstance()
-        startDate.timeInMillis = selectedDate
-        startDate[Calendar.DAY_OF_MONTH] = 1 // 设置为当前月份的第一天
-        startDate[Calendar.HOUR_OF_DAY] = 0
-        startDate[Calendar.MINUTE] = 0
-        startDate[Calendar.SECOND] = 0
-        val endDate = Calendar.getInstance()
-        endDate.timeInMillis = selectedDate
-        endDate[Calendar.DAY_OF_MONTH] =
-            endDate.getActualMaximum(Calendar.DAY_OF_MONTH) // 设置为当前月份的最后一天
-        endDate[Calendar.HOUR_OF_DAY] = 23
-        endDate[Calendar.MINUTE] = 59
-        endDate[Calendar.SECOND] = 59
-        val userId = intent.getLongExtra("EXTRA_USER_ID", -1)
-        fList = database!!.getAllHBData()
-        rcvAdapter!!.pList = fList
-        rcvAdapter!!.notifyDataSetChanged()
+                // 计算当前选定月份的开始和结束日期
+                val startDate = Calendar.getInstance()
+                startDate.timeInMillis = selectedDate
+                startDate[Calendar.DAY_OF_MONTH] = 1 // 设置为当前月份的第一天
+                startDate[Calendar.HOUR_OF_DAY] = 0
+                startDate[Calendar.MINUTE] = 0
+                startDate[Calendar.SECOND] = 0
+                val endDate = Calendar.getInstance()
+                endDate.timeInMillis = selectedDate
+                endDate[Calendar.DAY_OF_MONTH] =
+                    endDate.getActualMaximum(Calendar.DAY_OF_MONTH) // 设置为当前月份的最后一天
+                endDate[Calendar.HOUR_OF_DAY] = 23
+                endDate[Calendar.MINUTE] = 59
+                endDate[Calendar.SECOND] = 59
+                val userId = AppGlobalRepository.userId
+                fList = data
+                rcvAdapter!!.pList = fList
+                rcvAdapter!!.notifyDataSetChanged()
 
-        // 执行数据库查询
-        val data: List<MyData> = fList
+                // 执行数据库查询
+                val data: List<MyData> = fList
 
-        // 转换数据格式
-        val entryPair = convertDataToEntries(data)
+                // 转换数据格式
+                val entryPair = convertDataToEntries(data)
 
-        // 更新折线图
-        updateLineChart(entryPair.first, entryPair.second)
+                // 更新折线图
+                updateLineChart(entryPair.first, entryPair.second)
+            }
+
+        }
+
     }
 }

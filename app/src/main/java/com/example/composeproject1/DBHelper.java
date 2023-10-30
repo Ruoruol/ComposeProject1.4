@@ -15,7 +15,7 @@ import java.util.Calendar;
 
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = Constant.DbKey.DB_NAME +".db";
+    private static final String DATABASE_NAME = Constant.DbKey.DB_NAME + ".db";
     private static final int DATABASE_VERSION = 1;
     // 表格名稱
     private static final String TABLE_USERS = DB_USER_TABLE_NAME;
@@ -75,7 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    void addHBData(String date, String high, String low, String hb,String item,long userID) {
+    void addHBData(String date, String high, String low, String hb, String item, long userID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -114,6 +114,31 @@ public class DBHelper extends SQLiteOpenHelper {
         return peopleList;
     }
 
+    public ArrayList<MyData> getAllHBDataByUserId(long userId) {
+        ArrayList<MyData> peopleList = new ArrayList<MyData>();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_HEARTB + " WHERE " + USER_ID + " = " + userId;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                MyData p = new MyData(
+                        Integer.parseInt(cursor.getString(0)),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3),
+                        cursor.getString(4),
+                        cursor.getString(5),
+                        Long.parseLong(cursor.getString(6))
+                );
+                peopleList.add(p);
+            } while (cursor.moveToNext());
+        }
+        return peopleList;
+    }
+
     public int updateHBData(MyData mydata) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -126,7 +151,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(HB_ITEM, mydata.item);
 
         return db.update(TABLE_HEARTB, values, HB_ID + " = ?",
-                new String[] { String.valueOf(mydata.id) });
+                new String[]{String.valueOf(mydata.id)});
     }
 
     // 刪除
@@ -136,7 +161,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[]{String.valueOf(mydata.id)});
 
     }
-    public ArrayList<MyData> getHBDataByMonth(Calendar year, Calendar month,long user_id) {
+
+    public ArrayList<MyData> getHBDataByMonth(Calendar year, Calendar month, long user_id) {
         ArrayList<MyData> dataList = new ArrayList<>();
 
         int yearValue = year.get(Calendar.YEAR);
