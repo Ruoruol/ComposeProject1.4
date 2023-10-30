@@ -1,27 +1,31 @@
 package com.example.composeproject1;
 
+import static com.example.composeproject1.model.Constant.DbKey.DB_USER_TABLE_NAME;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.composeproject1.model.Constant;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 
 public class DBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "HDB.db";
+    private static final String DATABASE_NAME = Constant.DbKey.DB_NAME +".db";
     private static final int DATABASE_VERSION = 1;
     // 表格名稱
-    private static final String TABLE_USERS = "users";
+    private static final String TABLE_USERS = DB_USER_TABLE_NAME;
     private static final String TABLE_HEARTB = "heartb";
 
 
     // user表格欄位
-    private static final String COLUMN_USER_ID = "id";
-    private static final String COLUMN_USER_NAME = "usname";
-    private static final String COLUMN_USER_PASSWORD = "uspassword";
+    private static final String COLUMN_USER_ID = Constant.DbKey.KEY_USER_ID;
+    private static final String COLUMN_USER_NAME = Constant.DbKey.KEY_USER_NAME;
+    private static final String COLUMN_USER_PASSWORD = Constant.DbKey.KEY_USER_PASSWORD;
 
     // heartbeat格欄位
     private static final String HB_ID = "id";

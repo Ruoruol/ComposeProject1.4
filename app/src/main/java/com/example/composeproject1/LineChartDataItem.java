@@ -18,11 +18,11 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class LineChartDataView {
+public class LineChartDataItem {
     Context context;
     LineChart lineChart;
 
-    public LineChartDataView(LineChart lineChart, Context context) {
+    public LineChartDataItem(LineChart lineChart, Context context) {
         this.context = context;
         this.lineChart = lineChart;
     }
