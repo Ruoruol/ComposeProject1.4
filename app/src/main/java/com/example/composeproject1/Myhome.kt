@@ -104,7 +104,7 @@ class Myhome : AppCompatActivity() {
             startActivity(Intent(this@Myhome, AirQualityActivity::class.java))
         }
         binding.btHeartSleep.setOnClickListener {
-            startActivity(Intent(this@Myhome, HeartSleep::class.java))
+            startActivity(Intent(this@Myhome, BloodPressure::class.java))
         }
 
         binding.btMedicationsList.setOnClickListener {

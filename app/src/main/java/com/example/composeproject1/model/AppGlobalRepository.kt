@@ -69,11 +69,11 @@ object AppGlobalRepository {
         scope.launch {
             val userInfo = login(context, account, password)
             val isSuccess = userInfo != null
+            if (isSuccess) {
+                userName = userInfo!!.userName
+                userId = userInfo.userId
+            }
             withContext(Dispatchers.Main) {
-                if (isSuccess) {
-                    userName = userInfo!!.userName
-                    userId = userInfo.userId
-                }
                 func(
                     if (isSuccess) userInfo!!.userId else -1
                 )
@@ -82,6 +82,7 @@ object AppGlobalRepository {
     }
 
     fun logout() {
+        userId = -1
         userName = ""
         userPassWord = ""
         (loginStatusFlow as MutableStateFlow).value = false

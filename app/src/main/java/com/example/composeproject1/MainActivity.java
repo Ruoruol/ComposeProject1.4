@@ -41,25 +41,24 @@ public class MainActivity extends AppCompatActivity {
         sp1 = this.getSharedPreferences("useinfo", this.MODE_PRIVATE);
         sp2 = this.getSharedPreferences("username", this.MODE_PRIVATE);
 
-
+        final long userId = AppGlobalRepository.INSTANCE.getUserId();
+        if (userId != -1) {
+            goMainActivity(userId);
+        }
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = name.getText().toString();
                 String password = pwd.getText().toString();
-
                 AppGlobalRepository.INSTANCE.login(
                         MainActivity.this,
                         username,
                         password,
                         longResult -> {
-                            if (longResult==-1){
+                            if (longResult == -1) {
                                 Toast.makeText(MainActivity.this, "帳號或密碼錯誤！", Toast.LENGTH_LONG).show();
-                            }else{
-                                Intent intent = new Intent();
-                                intent.setClass(MainActivity.this, Myhome.class);
-                                intent.putExtra("EXTRA_USER_ID", longResult);
-                                startActivity(intent);
+                            } else {
+                                goMainActivity(longResult);
                             }
                             return Unit.INSTANCE;
                         }
@@ -99,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "前往註冊！", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void goMainActivity(long userId) {
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, Myhome.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("EXTRA_USER_ID", userId);
+        startActivity(intent);
     }
 
 }

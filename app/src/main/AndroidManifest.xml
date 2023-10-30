@@ -74,8 +74,10 @@
         <activity
             android:name=".AirQualityActivity"
             android:exported="false" />
+        <activity android:name=".BloodPressure"/>
         <activity android:name=".EmptyActivity"/>
         <activity android:name=".CalenderActivity"/>
+        <activity android:name=".LineChartData"/>
     </application>
 
 </manifest>
