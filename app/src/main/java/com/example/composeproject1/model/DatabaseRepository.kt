@@ -4,6 +4,7 @@ import com.example.composeproject1.App
 import com.example.composeproject1.database.AppDatabase
 import com.example.composeproject1.database.MedicationData
 import com.example.composeproject1.database.MyHistoryData
+import com.example.composeproject1.database.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -13,6 +14,7 @@ import java.util.UUID
 
 object DatabaseRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val userDao = AppDatabase.getDatabase(App.appContext).userDao()
     suspend fun getMedicationList(): List<MedicationData> {
         return withContext(Dispatchers.IO) {
             return@withContext AppDatabase.getDatabase(App.appContext).medicationDao()
@@ -87,5 +89,27 @@ object DatabaseRepository {
         scope.launch {
             AppDatabase.getDatabase(App.appContext).myHistoryDao().deleteData(data)
         }
+    }
+
+    suspend fun hasUserAccount(userAccount: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            return@withContext userDao.getUserByAccount(userAccount).isNotEmpty()
+        }
+    }
+
+    fun insertUser(userAccount: String, password: String) {
+        scope.launch {
+            userDao.insertUser(
+                UserData(
+                    userAccount = userAccount,
+                    userPassword = password,
+                    userName = UUID.randomUUID().toString()
+                )
+            )
+        }
+    }
+
+    fun getUserInfoByAccountAndPassword(account: String, password: String): UserData? {
+        return userDao.getUserByAccountPassword(account, password).getOrNull(0)
     }
 }

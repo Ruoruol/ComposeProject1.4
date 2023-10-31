@@ -8,11 +8,13 @@ import android.util.Log
 import com.example.composeproject1.App
 import com.example.composeproject1.DBHelper
 import com.example.composeproject1.bean.UserInfo
+import com.example.composeproject1.database.UserData
 import com.example.composeproject1.model.Constant.DbKey.DB_USER_TABLE_NAME
 import com.example.composeproject1.model.Constant.DbKey.KEY_USER_ID
 import com.example.composeproject1.model.Constant.DbKey.KEY_USER_NAME
 import com.example.composeproject1.model.Constant.DbKey.KEY_USER_PASSWORD
 import com.example.composeproject1.model.Constant.FileDbKey.KEY_SP_USER_ID
+import com.example.composeproject1.model.DatabaseRepository.getUserInfoByAccountAndPassword
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -113,41 +115,12 @@ object AppGlobalRepository {
              return@withContext isSuccess
          }
      }*/
-    suspend fun login(context: Context, account: String, password: String): UserInfo? {
+    suspend fun login(context: Context, account: String, password: String): UserData? {
         return withContext(Dispatchers.IO) {
-            // 查询用户名和密码相同的数据
-            // 初始化数据库连接
-
-            // 初始化数据库连接
-            val mysql = DBHelper(App.appContext)
-            val db = mysql.getWritableDatabase()
-            // 查询用户名和密码相同的数据
-            val cursor: Cursor = db.query(
-                DB_USER_TABLE_NAME,
-                arrayOf(KEY_USER_ID, KEY_USER_NAME, KEY_USER_PASSWORD),
-                "${KEY_USER_NAME}=? and ${KEY_USER_PASSWORD}=?",
-                arrayOf(account, password),
-                null,
-                null,
-                null
-            )
-
-            val flag = cursor.count
-            if (flag != 0) {
-                cursor.moveToFirst()
-                val userIdIndex = cursor.getColumnIndex(KEY_USER_ID)
-                val userNameIndex = cursor.getColumnIndex(KEY_USER_NAME)
-                Log.i(
-                    "msgddd",
-                    "${cursor.columnCount} userIdIndex:${userIdIndex} userNameIndex:${userNameIndex}"
-                )
-                @SuppressLint("Range") val userId =
-                    cursor.getLong(userIdIndex)
+            val userData = getUserInfoByAccountAndPassword(account, password)
+            if (userData != null) {
                 (loginStatusFlow as MutableStateFlow).value = true
-                return@withContext UserInfo(
-                    userId = userId,
-                    userName = cursor.getString(userNameIndex)
-                )
+                return@withContext userData
             }
             return@withContext null
         }

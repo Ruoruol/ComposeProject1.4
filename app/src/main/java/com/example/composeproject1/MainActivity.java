@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, Register.class);
+                intent.setClass(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 Toast.makeText(MainActivity.this, "前往註冊！", Toast.LENGTH_SHORT).show();
             }

@@ -45,9 +45,7 @@ class CalenderActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private var adapter: MyAdapter? = null
     private var itemList: MutableList<String>? = null
-    var gson = Gson()
 
-    var database: SQLiteDatabaseHelper? = null
     private var selectedDate = "" // 用於保存日期
     var DB = "planB"
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +71,6 @@ class CalenderActivity : AppCompatActivity() {
     private fun initView(binding: ActivityCalenderBinding) {
         calendarView = binding.calendarView
         recyclerView = binding.rcvList
-        database = SQLiteDatabaseHelper(this, DB, null, 1)
         itemList = ArrayList()
         adapter = MyAdapter(this, arrayListOf(), selectedDate)
         recyclerView.setAdapter(adapter)
