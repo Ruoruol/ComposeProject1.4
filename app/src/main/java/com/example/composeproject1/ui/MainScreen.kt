@@ -57,28 +57,34 @@ fun MainScreen(
             Column(
                 Modifier
                     .fillMaxWidth()) {
+                Spacer(modifier = Modifier.height(15.dp)) // 增加行距
                 Text(text = "指標(AQI): ${curQuality?.aqi}", color = Color.Black, fontSize = 36.sp, modifier = Modifier.padding(start = 24.dp))
-                Text(text = "狀態: ${curQuality?.status}", color = Color.Gray, fontSize = 34.sp, modifier = Modifier.padding(start = 24.dp))
+                Spacer(modifier = Modifier.height(8.dp)) // 增加行距
+                Text(text = "狀態: ${curQuality?.status}", color = Color.Black, fontSize = 34.sp, modifier = Modifier.padding(start = 24.dp))
+                Spacer(modifier = Modifier.height(8.dp)) // 增加行距
                 Text(text = "${curQuality?.publishtime}", color = Color.Black, fontSize = 20.sp, modifier = Modifier.padding(start = 24.dp))
             }
             val quality = curQuality
             if (quality != null) {
                 Spacer(modifier = Modifier.height(30.dp))
                 val value = quality.aqi?.toIntOrNull() ?: 0
-                val hint = if (value < 50) "詳細資料:空氣品質為良好，可正常戶外活動" else if (value > 50||value <= 100) "詳細資料:極特殊敏感族群建議注意可能產生的咳嗽或呼吸急促症狀，但仍可正常戶外活動。" else if (value > 100||value <= 150) "詳細資料:1.有心臟、呼吸道及心血管疾病患者、孩童及老年人，建議減少體力消耗活動及戶外活動，必要外出應配戴口罩。2.具有氣喘的人可能需增加使用吸入劑的頻率。" else "詳細資料:1.有心臟、呼吸道及心血管疾病患者、孩童及老年人，建議留在室內並減少體力消耗活動，必要外出應配戴口罩。2.具有氣喘的人可能需增加使用吸入劑的頻率。"
+                val hint = if (value < 50) "詳細資料:空氣品質為良好，可正常戶外活動" else if (value > 50 && value <= 100) "詳細資料:極特殊敏感族群建議注意可能產生的咳嗽或呼吸急促症狀，但仍可正常戶外活動。" else if (value > 100 && value <= 150) "詳細資料:1.有心臟、呼吸道及心血管疾病患者、孩童及老年人，建議減少體力消耗活動及戶外活動，必要外出應配戴口罩。2.具有氣喘的人可能需增加使用吸入劑的頻率。" else "詳細資料:1.有心臟、呼吸道及心血管疾病患者、孩童及老年人，建議留在室內並減少體力消耗活動，必要外出應配戴口罩。2.具有氣喘的人可能需增加使用吸入劑的頻率。"
                 Column(
                     Modifier
                         .fillMaxWidth()
+
                 ) {
 
 
                     Text(text = hint,color = Color.Red,fontSize = 28.sp, modifier = Modifier.padding(start = 24.dp),lineHeight = 45.sp)
+                    Spacer(modifier = Modifier.height(20.dp)) // 增加行距
                 }
             }
             Button({
                 onEvent(MainEvent.Refresh)
             }){
-                Text("刷新", modifier = Modifier)
+
+                Text("刷新", modifier = Modifier,fontSize = 28.sp)
             }
         }
 
@@ -137,7 +143,7 @@ fun CityText(
 
 }
 
-//选择区域
+//選擇區域
 @Composable
 fun AreaText(
     modifier: Modifier,
@@ -192,6 +198,7 @@ fun AreaText(
 
 }
 
+//下拉選單
 @Composable
 fun <T> AreaDropDown(
     isShow: Boolean,

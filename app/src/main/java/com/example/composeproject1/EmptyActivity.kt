@@ -19,7 +19,7 @@ class EmptyActivity : ComponentActivity() {
             ComposeProject1Theme {
                 Surface() {
                     Text(
-                        text = "敬请期待",
+                        text = "敬請期待",
                         fontSize = 25.sp,
                         color = Color.Black,
                         modifier = Modifier
