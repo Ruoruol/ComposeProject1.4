@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.example.composeproject1.model.DatabaseRepository
+import com.example.composeproject1.ui.theme.ComposeProject1Theme
 import com.example.composeproject1.ui.theme.PrimaryColor
 import com.example.composeproject1.utils.ToastUtils
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +42,9 @@ class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            RegisterScreen()
+            ComposeProject1Theme {
+                RegisterScreen()
+            }
         }
     }
 
@@ -113,8 +116,8 @@ class RegisterActivity : ComponentActivity() {
                     DatabaseRepository.insertUser(account, password)
                     withContext(Dispatchers.Main) {
                         ToastUtils.shortToast("注册成功")
+                        finish()
                     }
-                    finish()
                 }
             }
         }
