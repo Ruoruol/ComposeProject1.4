@@ -46,18 +46,19 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
                 userId,
                 minDayTimeInMillis,
                 maxDayTimeInMillis
-            ).collectLatest {
-                it.let { bloodPressureList ->
-                    val list = bloodPressureList.toList().sortedBy { data ->
-                        data.bloodPressureTime * 10 + data.bloodPressureDayDesc
+            ).collectLatest { pressureData ->
+                pressureData.let { bloodPressureList ->
+                    val list = bloodPressureList.toList().sortedBy {
+                        it.year * 100000 + it.month * 1000 + it.day * 10 + it.bloodPressureDayDesc
                     }
                     dataList = list
                     systolicPointList = list.map { bloodPressureData ->
                         cleaner.timeInMillis = bloodPressureData.bloodPressureTime
+                        val descFloat = (bloodPressureData.bloodPressureDayDesc * 3) / 10.0f
                         val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
                         val y = bloodPressureData.bloodPressureHigh.toFloat()
                         Log.i("msgdddd", "day $x")
-                        x to y
+                        (x + descFloat) to y
                     }
                     diastolicPointList = list.map { bloodPressureData ->
                         cleaner.timeInMillis = bloodPressureData.bloodPressureTime

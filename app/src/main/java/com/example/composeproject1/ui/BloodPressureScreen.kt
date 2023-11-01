@@ -211,10 +211,10 @@ fun BloodPressureChart(
                     // 假设X轴的值为日期的时间戳（毫秒）
                     val calendar = Calendar.getInstance()
                     val day = value.toInt()
+                    val descFloat = ((value - day) * 10).toInt()
                     calendar.set(year, month, day)
                     val dateFormat = SimpleDateFormat("MM/dd")
-                    Log.i("msgddd", "${value}")
-                    return "${dateFormat.format(calendar.time)}"
+                    return "${dateFormat.format(calendar.time)}${if (descFloat == 0) "上" else if (descFloat == 3) "中" else if (descFloat == 6) "晚" else ""}"
                 }
             }
             val lineData = it.lineData
