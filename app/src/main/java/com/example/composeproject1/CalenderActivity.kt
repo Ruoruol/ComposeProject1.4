@@ -109,9 +109,9 @@ class CalenderActivity : AppCompatActivity() {
     private fun dateChanged(year: Int, month: Int, dayOfMonth: Int) {
         selectedDate = formatDate(year, month, dayOfMonth)
         val startDate = Calendar.getInstance()
-        startDate[year, month, dayOfMonth, 0, 0] = 0 // 设置时间为当天的开始时间
+        startDate[year, month, dayOfMonth, 0, 0] = 0 // 設置時間為當天的開始時間
         val endDate = Calendar.getInstance()
-        endDate[year, month, dayOfMonth, 23, 59] = 59 // 设置时间为当天的结束时间
+        endDate[year, month, dayOfMonth, 23, 59] = 59 // 設置時間為當天的結束時間
         lifecycleScope.launch {
             val list = DatabaseRepository.fetchHistoryDataList(
                 startDate.timeInMillis,
@@ -125,7 +125,7 @@ class CalenderActivity : AppCompatActivity() {
     private fun addItem(newItem: String, selectedDate: String) {
         itemList!!.add(newItem)
 
-        // 添加项目到数据库
+        // 添加项目到資料庫
         lifecycleScope.launch {
             // 設定 CalendarView 的選擇日期以跳轉到相關的月份
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -161,7 +161,7 @@ class CalenderActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
             withContext(Dispatchers.Main.immediate) {
-                // 重新查询数据库以获取最新数据
+                // 重新查尋資料庫以獲取最新數據
                 this@CalenderActivity.selectedDate = selectedDate
                 GetCurrentMonth()
             }
@@ -185,7 +185,7 @@ class CalenderActivity : AppCompatActivity() {
             val item = pList[position]
             holder.tv_date.text = sdf.format(Date(item.date).apply {
                 time
-            }) // 使用存储在数据对象中的日期
+            }) // 使用储存在數據對象中的日期
             holder.tv_item.text = item.item
         }
 

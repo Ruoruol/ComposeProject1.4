@@ -37,16 +37,16 @@ class AlarmReceiver : BroadcastReceiver() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action.equals(TIMER_ACTION_REPEATING)) {
-            Log.i("alarm_receiver_log", "周期闹钟")
+            Log.i("alarm_receiver_log", "週期鬧鐘")
         } else if (intent.action.equals(TIMER_ACTION)) {
             val type = intent.getIntExtra("type", -1)
             if (type == Constant.TYPE_MEDICATION) {
-                Log.i("alarm_receiver_log", "定时闹钟")
+                Log.i("alarm_receiver_log", "定時鬧鐘")
                 val cancel = intent.getBooleanExtra("cancel", false)
                 if (cancel) {
                     return
                 }
-                Log.i("alarm_receiver_log", "开始")
+                Log.i("alarm_receiver_log", "開始")
                 val id = intent.getIntExtra("id", 0)
                 if (id == 0) return
                 scope.launch {
@@ -140,8 +140,8 @@ class AlarmReceiver : BroadcastReceiver() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "用药通知"
-            val descriptionText = "用于提醒用户用药"
+            val name = "用藥通知"
+            val descriptionText = "用於提醒用戶用藥"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
                 description = descriptionText
@@ -159,7 +159,7 @@ class AlarmReceiver : BroadcastReceiver() {
         // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "行事曆"
-            val descriptionText = "用于用户预约"
+            val descriptionText = "用於用戶预约"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID_HISTORY, name, importance).apply {
                 description = descriptionText

@@ -81,28 +81,28 @@ class BloodPressure : AppCompatActivity() {
                     bt_add.setOnClickListener(View.OnClickListener {
                         val it = Intent(this@BloodPressure, LineChartData::class.java)
                         it.putExtra("action", Action.NEW)
-                        // 将用户的 ID 传递给 linechart 页面
+                        // 將用戶的 ID 傳遞给 linechart 頁面
                         it.putExtra("user_id", userId)
                         newLauncher.launch(it)
                     })
 
 
-                    // 监听日历选择事件
+                    // 監聽日歷選擇事件
                     calendarView.setOnDateChangeListener(OnDateChangeListener { view, year, month, dayOfMonth -> // 计算日期范围
                         val startDate = Calendar.getInstance()
-                        startDate[year, month, dayOfMonth, 0, 0] = 0 // 设置时间为当天的开始时间
+                        startDate[year, month, dayOfMonth, 0, 0] = 0 // 設置時間為當天的開始時間
                         val endDate = Calendar.getInstance()
-                        endDate[year, month, dayOfMonth, 23, 59] = 59 // 设置时间为当天的结束时间
+                        endDate[year, month, dayOfMonth, 23, 59] = 59 // 設置時間為當天的結束時間
                         fList = database!!.getHBDataByMonth(startDate, endDate, userId)
                         rcvAdapter!!.pList = fList
                         rcvAdapter!!.notifyDataSetChanged()
 
-                        // 执行数据库查询
+                        // 執行資料庫查詢
                         val data: List<MyData> =
                             database!!.getHBDataByMonth(startDate, endDate, userId)
-                        // 转换数据格式
+                        // 轉換數據格式
                         val entryPair = convertDataToEntries(data)
-                        // 更新折线图
+                        // 更新折線圖
                         updateLineChart(entryPair.first, entryPair.second)
                     })
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -123,7 +123,7 @@ class BloodPressure : AppCompatActivity() {
 
     private fun updateLineChat(data: List<MyData>) {
         val entryPair = convertDataToEntries(data)
-        // 更新折线图
+        // 更新折線圖
         updateLineChart(entryPair.first, entryPair.second)
     }
 
@@ -136,8 +136,8 @@ class BloodPressure : AppCompatActivity() {
                     val json = it!!.getStringExtra("json")
                     val p = gson.fromJson(json, MyData::class.java)
                     database!!.addHBData(p.date, p.high, p.low, p.hb, p.item, p.user_id)
-                    // 获取新数据的日期，并设置为选定日期
-                    val newDataDate = p.date // 假设日期存储在 MyData 对象的 date 字段中
+                    // 獲取新數據的日期，並設置為選定日期
+                    val newDataDate = p.date // 假設日期存在 MyData 對象的 date 字段中
                     val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                     try {
                         val date = dateFormat.parse(newDataDate)
@@ -147,7 +147,7 @@ class BloodPressure : AppCompatActivity() {
                         e.printStackTrace()
                     }
 
-                    // 更新折线图和列表
+                    // 更新折線圖和列表
                     updateLineChartForCurrentMonth()
                 }
             }
@@ -177,10 +177,10 @@ class BloodPressure : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: RCVHolder, position: Int) {
 
-            // 在这里对数据进行排序
+            // 在這裡對數據進行排序
             Collections.sort(
                 pList,
-                java.util.Comparator { data1, data2 -> // 假设 MyData 中有一个表示日期的字段叫做 date
+                java.util.Comparator { data1, data2 -> // 假設 MyData 中有一個表示日期的字段叫做 date
                     val sdf = SimpleDateFormat("yyyy-MM-dd")
                     try {
                         val date1 = sdf.parse(data1.date)
@@ -247,29 +247,29 @@ class BloodPressure : AppCompatActivity() {
     }
 
     private fun initializeLineChart() {
-        // 设置折线图的描述
+        // 設置折線圖的描述
         val description = Description()
-        description.text = "血壓趋势"
+        description.text = "血壓趨勢"
         lineChart!!.description = description
-        lineChart!!.isDragEnabled = true // 允许拖动
-        lineChart!!.setScaleEnabled(true) // 允许缩放
-        lineChart!!.setPinchZoom(true) // 启用缩放手势
+        lineChart!!.isDragEnabled = true // 允許拖動
+        lineChart!!.setScaleEnabled(true) // 允許縮放
+        lineChart!!.setPinchZoom(true) // 啟動縮放手勢
 
 
-        // 获取X轴和Y轴对象
+        // 獲取X軸和Y軸對象
         val xAxis = lineChart!!.xAxis
         val leftYAxis = lineChart!!.axisLeft
         val rightYAxis = lineChart!!.axisRight
         var data: List<MyData?> = ArrayList()
         data = database!!.allHBData
 
-        // 设置X轴标签的位置
+        // 設置X軸標籤的位置
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        // 自定义X轴标签的间隔
-        xAxis.setLabelCount(data.size, true) // 设置标签数量为数据点的数量
+        // 自定義X軸標籤的間隔
+        xAxis.setLabelCount(data.size, true) // 設置標簽數量为數據點的數量
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                // 假设X轴的值为日期的时间戳（毫秒）
+                // 假設X軸的值為日期的時間戳（毫秒）
                 val timestamp = value.toLong()
                 val calendar = Calendar.getInstance()
                 calendar.timeInMillis = timestamp
@@ -278,26 +278,26 @@ class BloodPressure : AppCompatActivity() {
             }
         }
 
-        // 自定义收缩压线的样式
+        // 自定義收縮壓線的樣式
         val systolicDataSet = LineDataSet(ArrayList(), "收缩壓")
         systolicDataSet.color = Color.RED
         systolicDataSet.setCircleColor(Color.RED)
 
-        // 自定义舒张压线的样式
+        // 自定義舒張壓線的樣式
         val diastolicDataSet = LineDataSet(ArrayList(), "舒张壓")
         diastolicDataSet.color = Color.BLUE
         diastolicDataSet.setCircleColor(Color.BLUE)
 
-        // 创建LineData对象并设置数据
+        // 創建LineData對象並設置數據
         val lineData = LineData(systolicDataSet, diastolicDataSet)
         lineChart!!.data = lineData
 
-        // 添加Y轴的限制线，例如正常范围
-        val normalSystolicRange = LimitLine(120f, "正常范围")
+        // 添加Y軸限制線(正常範圍)
+        val normalSystolicRange = LimitLine(120f, "正常範圍")
         normalSystolicRange.lineColor = Color.GREEN
         normalSystolicRange.lineWidth = 2f
         leftYAxis.addLimitLine(normalSystolicRange)
-        val normalDiastolicRange = LimitLine(80f, "正常范围")
+        val normalDiastolicRange = LimitLine(80f, "正常範圍")
         normalDiastolicRange.lineColor = Color.GREEN
         normalDiastolicRange.lineWidth = 2f
         leftYAxis.addLimitLine(normalDiastolicRange)
@@ -305,12 +305,12 @@ class BloodPressure : AppCompatActivity() {
     }
 
     private fun convertDataToEntries(data: List<MyData>): Pair<List<Entry>, List<Entry>> {
-        // 将数据库中的数据转换为Entry对象的列表
+        // 將數據庫中的數據轉換為Entry對象的列表
         val systolicEntries: MutableList<Entry> = ArrayList()
         val diastolicEntries: MutableList<Entry> = ArrayList()
         for (item in data) {
-            // 假设MyData对象中包含日期、高压和低压数据
-            // 将日期的时间戳作为X轴值
+            // 假設MyData對象中包含日期、高壓和低壓數據
+            // 將日期的時間戳作為X軸值
             val timestamp = getTimestampFromStringDate(item.getDate())
             val highPressure = item.highPressure.toFloat()
             val lowPressure = item.lowPressure.toFloat()
@@ -349,10 +349,10 @@ class BloodPressure : AppCompatActivity() {
             systolicDataSet.values = systolicEntries
         }
         if (diastolicDataSet == null) {
-            diastolicDataSet = LineDataSet(diastolicEntries, "舒张壓")
+            diastolicDataSet = LineDataSet(diastolicEntries, "舒張壓")
             diastolicDataSet.color = Color.BLUE
             diastolicDataSet.setCircleColor(Color.BLUE)
-            diastolicDataSet.label = "舒张壓"
+            diastolicDataSet.label = "舒張壓"
             lineData.addDataSet(diastolicDataSet)
         } else {
             diastolicDataSet.values = diastolicEntries
@@ -366,22 +366,22 @@ class BloodPressure : AppCompatActivity() {
         lifecycleScope.launch(Dispatchers.IO) {
             val data = database!!.getAllHBDataByUserId(AppGlobalRepository.userId)
             withContext(Dispatchers.Main) {
-                // 获取当前选定的日期
+                // 獲取當前選定的日期
                 val selectedDate = calendarView!!.date
                 val selectedCalendar = Calendar.getInstance()
                 selectedCalendar.timeInMillis = selectedDate
 
-                // 计算当前选定月份的开始和结束日期
+                // 計算當前選定月份的開始和结束日期
                 val startDate = Calendar.getInstance()
                 startDate.timeInMillis = selectedDate
-                startDate[Calendar.DAY_OF_MONTH] = 1 // 设置为当前月份的第一天
+                startDate[Calendar.DAY_OF_MONTH] = 1 // 設置為當前月份的第一天
                 startDate[Calendar.HOUR_OF_DAY] = 0
                 startDate[Calendar.MINUTE] = 0
                 startDate[Calendar.SECOND] = 0
                 val endDate = Calendar.getInstance()
                 endDate.timeInMillis = selectedDate
                 endDate[Calendar.DAY_OF_MONTH] =
-                    endDate.getActualMaximum(Calendar.DAY_OF_MONTH) // 设置为当前月份的最后一天
+                    endDate.getActualMaximum(Calendar.DAY_OF_MONTH) // 設置為當前月份的最後一天
                 endDate[Calendar.HOUR_OF_DAY] = 23
                 endDate[Calendar.MINUTE] = 59
                 endDate[Calendar.SECOND] = 59
@@ -390,13 +390,13 @@ class BloodPressure : AppCompatActivity() {
                 rcvAdapter!!.pList = fList
                 rcvAdapter!!.notifyDataSetChanged()
 
-                // 执行数据库查询
+                // 執行資料查詢
                 val data: List<MyData> = fList
 
-                // 转换数据格式
+                // 轉換數據格式
                 val entryPair = convertDataToEntries(data)
 
-                // 更新折线图
+                // 更新折線圖
                 updateLineChart(entryPair.first, entryPair.second)
             }
 
