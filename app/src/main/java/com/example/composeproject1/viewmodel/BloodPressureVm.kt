@@ -106,6 +106,15 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
                 DatabaseRepository.deleteBloodPressureData(event.id)
             }
 
+            is BloodPressureEvent.OtherDatePressure -> {
+                emitEffect(BloodPressureEffect.ShowDateEffect)
+            }
+
+            is BloodPressureEvent.UpdateTimeEvent -> {
+                currentSelectTime = event.time
+                initTime()
+            }
+
             else -> {
 
             }
@@ -117,11 +126,14 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
 sealed class BloodPressureEvent : CommonEvent() {
     object GetBloodPressureInit : BloodPressureEvent()
     object NextMonthPressure : BloodPressureEvent()
+    object OtherDatePressure : BloodPressureEvent()
     object BeforeMonthPressure : BloodPressureEvent()
     class EditPressureEvent(val id: Long) : BloodPressureEvent()
     class DeletePressureEvent(val id: Long) : BloodPressureEvent()
+    class UpdateTimeEvent(val time: Long) : BloodPressureEvent()
 }
 
 sealed class BloodPressureEffect : IEffect {
     class GoEditEffect(val id: Long) : BloodPressureEffect()
+    object ShowDateEffect : BloodPressureEffect()
 }

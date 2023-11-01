@@ -171,7 +171,7 @@ fun BackOrForwardMonth(onEvent: (BloodPressureEvent) -> Unit) {
                 contentColor = PrimaryColor
             )
         ) {
-            Text(text = "上个月")
+            Text(text = "上个月", color = Color.White)
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(
@@ -181,7 +181,17 @@ fun BackOrForwardMonth(onEvent: (BloodPressureEvent) -> Unit) {
                 contentColor = PrimaryColor
             )
         ) {
-            Text(text = "下个月")
+            Text(text = "下个月", color = Color.White)
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Button(
+            onClick = {
+                onEvent(BloodPressureEvent.OtherDatePressure)
+            }, colors = ButtonDefaults.buttonColors(
+                contentColor = PrimaryColor
+            )
+        ) {
+            Text(text = "其他日期", color = Color.White)
         }
         Spacer(modifier = Modifier.weight(1f))
 
