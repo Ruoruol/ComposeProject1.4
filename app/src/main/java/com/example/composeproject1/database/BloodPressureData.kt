@@ -8,13 +8,19 @@ import androidx.room.PrimaryKey
 data class BloodPressureData(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "bloodPressureId")
-    val bloodPressureId: Long,
+    val bloodPressureId: Long = 0L,
     @ColumnInfo(name = "bloodPressureHigh")
     val bloodPressureHigh: Int,
     @ColumnInfo(name = "bloodPressureLow")
     val bloodPressureLow: Int,
     @ColumnInfo(name = "heartBeat")
     val heartBeat: Int,
+    @ColumnInfo(name = "year")
+    val year: Int,
+    @ColumnInfo(name = "month")
+    val month: Int,
+    @ColumnInfo(name = "day")
+    val day: Int,
     //早上 中午 晚上
     @ColumnInfo(name = "bloodPressureDayDesc")
     val bloodPressureDayDesc: Int,
@@ -23,5 +29,5 @@ data class BloodPressureData(
     val bloodPressureTime: Long,
     //用户id
     @ColumnInfo(name = "bloodPressureUserId")
-    val bloodPressureUserId: Int
+    val bloodPressureUserId: Long
 )

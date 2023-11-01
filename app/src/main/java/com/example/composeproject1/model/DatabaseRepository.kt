@@ -2,19 +2,25 @@ package com.example.composeproject1.model
 
 import com.example.composeproject1.App
 import com.example.composeproject1.database.AppDatabase
+import com.example.composeproject1.database.BloodPressureData
 import com.example.composeproject1.database.MedicationData
 import com.example.composeproject1.database.MyHistoryData
 import com.example.composeproject1.database.UserData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.ref.Cleaner
+import java.util.Calendar
 import java.util.UUID
 
 object DatabaseRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private val userDao = AppDatabase.getDatabase(App.appContext).userDao()
+    private val medicationDao = AppDatabase.getDatabase(App.appContext).medicationDao()
+    private val bloodPressureDao = AppDatabase.getDatabase(App.appContext).bloodPressureDao()
     suspend fun getMedicationList(): List<MedicationData> {
         return withContext(Dispatchers.IO) {
             return@withContext AppDatabase.getDatabase(App.appContext).medicationDao()
@@ -111,5 +117,89 @@ object DatabaseRepository {
 
     fun getUserInfoByAccountAndPassword(account: String, password: String): UserData? {
         return userDao.getUserByAccountPassword(account, password).getOrNull(0)
+    }
+
+    suspend fun getBloodPressureListBetween(
+        userId: Long,
+        startInMilli: Long,
+        endInMilli: Long
+    ): Flow<List<BloodPressureData>> {
+        return withContext(Dispatchers.IO) {
+            return@withContext bloodPressureDao.fetchBloodPressureListBetween(
+                userId,
+                startInMilli,
+                endInMilli
+            )
+        }
+
+    }
+
+    fun saveBloodPressureData(
+        bloodHeight: String,
+        bloodLow: String,
+        heartBeat: String,
+        bloodPressureDayDesc: Int,
+        bloodPressureTime: Long,
+        bloodPressureUserId: Long
+    ) {
+        val bloodHeightInt = bloodHeight.toIntOrNull() ?: -1
+        val bloodLowInt = bloodLow.toIntOrNull() ?: -1
+        val heartBeatInt = heartBeat.toIntOrNull() ?: -1
+        if (bloodHeightInt == -1 || bloodLowInt == -1 || heartBeatInt == -1) {
+            return
+        }
+        saveBloodPressureData(
+            bloodHeightInt,
+            bloodLowInt,
+            heartBeatInt,
+            bloodPressureDayDesc,
+            bloodPressureTime,
+            bloodPressureUserId
+        )
+
+    }
+
+    fun saveBloodPressureData(
+        bloodHeight: Int,
+        bloodLow: Int,
+        heartBeat: Int,
+        bloodPressureDayDesc: Int,
+        bloodPressureTime: Long,
+        bloodPressureUserId: Long
+    ) {
+        scope.launch {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = bloodPressureTime
+            val year = calendar.get(Calendar.YEAR)
+            val month = calendar.get(Calendar.MONTH)
+            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val curData = BloodPressureData(
+                bloodPressureHigh = bloodHeight,
+                bloodPressureLow = bloodLow,
+                heartBeat = heartBeat,
+                year = year,
+                month = month,
+                day = day,
+                bloodPressureDayDesc = bloodPressureDayDesc,
+                bloodPressureTime = bloodPressureTime,
+                bloodPressureUserId = bloodPressureUserId
+            )
+            val dbData = bloodPressureDao.selectBloodPressureByTime(
+                curData.bloodPressureUserId,
+                curData.year,
+                curData.month,
+                curData.day,
+                curData.bloodPressureDayDesc
+            ).getOrNull(0)
+            if (dbData == null) {
+                bloodPressureDao.insertBloodPressure(curData)
+            } else {
+                bloodPressureDao.updateBloodPressure(
+                    curData.copy(
+                        bloodPressureId = dbData.bloodPressureId
+                    )
+                )
+            }
+        }
     }
 }

@@ -1,18 +1,9 @@
 package com.example.composeproject1.model
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.database.Cursor
-import android.util.Log
 import com.example.composeproject1.App
-import com.example.composeproject1.DBHelper
-import com.example.composeproject1.bean.UserInfo
 import com.example.composeproject1.database.UserData
-import com.example.composeproject1.model.Constant.DbKey.DB_USER_TABLE_NAME
-import com.example.composeproject1.model.Constant.DbKey.KEY_USER_ID
-import com.example.composeproject1.model.Constant.DbKey.KEY_USER_NAME
-import com.example.composeproject1.model.Constant.DbKey.KEY_USER_PASSWORD
 import com.example.composeproject1.model.Constant.FileDbKey.KEY_SP_USER_ID
 import com.example.composeproject1.model.DatabaseRepository.getUserInfoByAccountAndPassword
 import kotlinx.coroutines.CoroutineScope
@@ -69,7 +60,7 @@ object AppGlobalRepository {
 
     fun login(context: Context, account: String, password: String, func: (Long) -> Unit) {
         scope.launch {
-            val userInfo = login(context, account, password)
+            val userInfo = login(account, password)
             val isSuccess = userInfo != null
             if (isSuccess) {
                 userName = userInfo!!.userName
@@ -90,32 +81,7 @@ object AppGlobalRepository {
         (loginStatusFlow as MutableStateFlow).value = false
     }
 
-    /* suspend fun login(context: Context, account: String, password: String): Boolean {
-         return withContext(Dispatchers.IO) {
-             val mysql = Mysql(context, "tables.db", null, 1)
-             val db = mysql.readableDatabase
-             //查询用户名和密码相同的数据
-             val cursor: Cursor = db.query(
-                 "tables",
-                 arrayOf("usname", "uspwd"),
-                 " usname=? and uspwd=?",
-                 arrayOf(account, password),
-                 null,
-                 null,
-                 null
-             )
-
-             val isSuccess = cursor.count != 0
-             if (isSuccess) {
-                 cursor.moveToFirst()
-                 userName = account
-                 userPassWord = password
-             }
-             (loginStatusFlow as MutableStateFlow).value = isSuccess
-             return@withContext isSuccess
-         }
-     }*/
-    suspend fun login(context: Context, account: String, password: String): UserData? {
+    suspend fun login(account: String, password: String): UserData? {
         return withContext(Dispatchers.IO) {
             val userData = getUserInfoByAccountAndPassword(account, password)
             if (userData != null) {

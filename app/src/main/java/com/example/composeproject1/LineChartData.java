@@ -13,8 +13,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.composeproject1.model.DatabaseRepository;
 import com.google.gson.Gson;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
 public class LineChartData extends AppCompatActivity {
@@ -27,12 +29,10 @@ public class LineChartData extends AppCompatActivity {
 
     Button bt_save, bt_Cancel, bt_date;
     Gson gson = new Gson();
-    DBHelper database;
     Calendar calendar;
-    String selectedDate;
+    long selectedDate;
     String action = "";
     int id = -1;
-
 
 
     @Override
@@ -53,7 +53,6 @@ public class LineChartData extends AppCompatActivity {
 
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.sp_time, time);
         spinner.setAdapter(adapter);
-        database = new DBHelper(this);
 
         Intent it = getIntent();
         action = it.getStringExtra("action");
@@ -75,7 +74,6 @@ public class LineChartData extends AppCompatActivity {
         bt_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String date = selectedDate;
                 String high = et_high.getText().toString();
                 String low = et_low.getText().toString();
                 String heartRate = et_hb.getText().toString();
@@ -83,15 +81,27 @@ public class LineChartData extends AppCompatActivity {
                 if (action.equals(Action.NEW)) {
                     id = -1;
                 }
-                MyData p = new MyData(id, date, high, low, heartRate, item, finalUser_id);
-                String json = gson.toJson(p);
-                Intent it = new Intent();
-                it.putExtra("json", json);
-                setResult(RESULT_OK, it);
+
+                int desc = switch (item) {
+                    case "早上" -> 0;
+                    case "中午" -> 1;
+                    case "晚上" -> 2;
+                    default -> -1;
+                };
+
+                DatabaseRepository.INSTANCE.saveBloodPressureData(
+                        high,
+                        low,
+                        heartRate,
+                        desc,
+                        selectedDate,
+                        finalUser_id
+                );
 
                 finish();
             }
         });
+
 
         bt_Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +129,7 @@ public class LineChartData extends AppCompatActivity {
                                 calendar.set(Calendar.MONTH, month);
                                 calendar.set(Calendar.DAY_OF_MONTH, day);
                                 selectedDate = getCurrentDate();
-                                tv_time.setText(selectedDate);
+                                tv_time.setText(getFormatString(selectedDate));
                             }
                         },
                         calendar.get(Calendar.YEAR),
@@ -131,7 +141,7 @@ public class LineChartData extends AppCompatActivity {
         });
     }
 
-    private String getCurrentDate() {
+    private long getCurrentDate() {
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -139,9 +149,15 @@ public class LineChartData extends AppCompatActivity {
         // 獲取星期
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month - 1, day);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);//星期
-        String dayOfWeekString = getDayOfWeekString(dayOfWeek);
+        return calendar.getTimeInMillis();
+    }
 
+    private String getFormatString(long time) {
+        calendar.setTimeInMillis(time);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // 0 ~ 11
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String dayOfWeekString = getDayOfWeekString(day);
         return String.format("%04d-%02d-%02d (%s)", year, month, day, dayOfWeekString);
     }
 

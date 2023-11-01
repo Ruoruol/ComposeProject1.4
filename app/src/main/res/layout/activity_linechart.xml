@@ -47,6 +47,7 @@
 
     <EditText
         android:id="@+id/et_high"
+        android:inputType="number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -54,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="12dp"
+        android:inputType="number"
         android:text="收縮壓  "
         android:textSize="20dp" />
 
@@ -67,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:padding="12dp"
+        android:inputType="number"
         android:text="心跳："
         android:textSize="24dp" />
 
