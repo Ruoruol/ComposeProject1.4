@@ -107,7 +107,7 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
             }
 
             is BloodPressureEvent.OtherDatePressure -> {
-                emitEffect(BloodPressureEffect.ShowDateEffect)
+                emitEffect(BloodPressureEffect.ShowDateEffect())
             }
 
             is BloodPressureEvent.UpdateTimeEvent -> {
@@ -135,5 +135,5 @@ sealed class BloodPressureEvent : CommonEvent() {
 
 sealed class BloodPressureEffect : IEffect {
     class GoEditEffect(val id: Long) : BloodPressureEffect()
-    object ShowDateEffect : BloodPressureEffect()
+    class ShowDateEffect : BloodPressureEffect()
 }
