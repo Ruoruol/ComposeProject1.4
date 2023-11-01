@@ -4,6 +4,8 @@ import android.content.Intent
 import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,8 +17,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -78,21 +82,7 @@ fun BloodPressureScreen(
             Text(text = "year: $year, month: ${month + 1}", color = PrimaryColor, fontSize = 20.sp)
             BloodPressureChart(year, month, systolicPointList, diastolicPointList)
             BloodPressureList()
-            LazyColumn (modifier = Modifier.fillMaxWidth()){
-                items(dataList) { bloodPressureData ->
-                    Column {
-                        Text(
-                            text = "${bloodPressureData.year}年，${bloodPressureData.month + 1}月，${bloodPressureData.day}日 ${
-                                if (bloodPressureData.bloodPressureDayDesc == 0) "上午" else if (bloodPressureData.bloodPressureDayDesc == 1) "中午" else "晚上"
-                            } 血压数据:"
-                        )
-                        Text(text = "收缩压: ${bloodPressureData.bloodPressureHigh}", modifier = Modifier.padding(start = 20.dp))
-                        Text(text = "舒张压: ${bloodPressureData.bloodPressureLow}", modifier = Modifier.padding(start = 20.dp))
-                        Text(text = "心率: ${bloodPressureData.heartBeat}", modifier = Modifier.padding(start = 20.dp))
-                        Spacer(modifier = Modifier.height(10.dp))
-                    }
-                }
-            }
+            ItemListScreen(dataList, onEvent)
         }
         val context = LocalContext.current
         FloatingActionButton(
@@ -109,6 +99,63 @@ fun BloodPressureScreen(
                 .padding(end = 20.dp, bottom = 50.dp)
         ) {
             Icon(imageVector = Icons.Default.Add, contentDescription = "添加", tint = Color.White)
+        }
+    }
+}
+
+@Composable
+fun ItemListScreen(dataList: List<BloodPressureData>, onEvent: (BloodPressureEvent) -> Unit) {
+    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+        items(dataList) { bloodPressureData ->
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .border(1.dp, PrimaryColor, RoundedCornerShape(10.dp))
+                    .padding(10.dp)
+            ) {
+                Text(
+                    text = "${bloodPressureData.year}年，${bloodPressureData.month + 1}月，${bloodPressureData.day}日 ${
+                        if (bloodPressureData.bloodPressureDayDesc == 0) "上午" else if (bloodPressureData.bloodPressureDayDesc == 1) "中午" else "晚上"
+                    } 血压数据:"
+                )
+                Text(
+                    text = "收缩压: ${bloodPressureData.bloodPressureHigh}",
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+                Text(
+                    text = "舒张压: ${bloodPressureData.bloodPressureLow}",
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+                Text(
+                    text = "心率: ${bloodPressureData.heartBeat}",
+                    modifier = Modifier.padding(start = 20.dp)
+                )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {
+                            onEvent(BloodPressureEvent.EditPressureEvent(bloodPressureData.bloodPressureId))
+                        }, colors = ButtonDefaults.buttonColors(
+                            contentColor = PrimaryColor
+                        )
+                    ) {
+                        Text(text = "编辑", color = Color.White)
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    Button(
+                        onClick = {
+                            onEvent(BloodPressureEvent.DeletePressureEvent(bloodPressureData.bloodPressureId))
+                        }, colors = ButtonDefaults.buttonColors(
+                            contentColor = Color.Red,
+                            containerColor = Color.Red
+                        )
+                    ) {
+                        Text(text = "删除", color = Color.White)
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
         }
     }
 }
@@ -166,7 +213,7 @@ fun BloodPressureChart(
                     val day = value.toInt()
                     calendar.set(year, month, day)
                     val dateFormat = SimpleDateFormat("MM/dd")
-                    Log.i("msgddd","${value}")
+                    Log.i("msgddd", "${value}")
                     return "${dateFormat.format(calendar.time)}"
                 }
             }

@@ -32,6 +32,10 @@ interface BloodPressureDao {
 
     @Update
     fun updateBloodPressure(bloodPressureData: BloodPressureData)
+
     @Insert
     fun insertBloodPressure(bloodPressureData: BloodPressureData)
+
+    @Query("DELETE FROM bloodPressure WHERE bloodPressureId = :id")
+    fun deleteBloodPressureById(id: Long)
 }

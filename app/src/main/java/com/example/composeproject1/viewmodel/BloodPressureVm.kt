@@ -11,6 +11,7 @@ import com.example.composeproject1.database.BloodPressureData
 import com.example.composeproject1.model.AppGlobalRepository
 import com.example.composeproject1.model.DatabaseRepository
 import com.example.composeproject1.mvi.CommonEvent
+import com.example.composeproject1.mvi.IEffect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -55,7 +56,7 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
                         cleaner.timeInMillis = bloodPressureData.bloodPressureTime
                         val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
                         val y = bloodPressureData.bloodPressureHigh.toFloat()
-                        Log.i("msgdddd","day $x")
+                        Log.i("msgdddd", "day $x")
                         x to y
                     }
                     diastolicPointList = list.map { bloodPressureData ->
@@ -96,6 +97,14 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
                 initTime()
             }
 
+            is BloodPressureEvent.EditPressureEvent -> {
+                emitEffect(BloodPressureEffect.GoEditEffect(event.id))
+            }
+
+            is BloodPressureEvent.DeletePressureEvent -> {
+                DatabaseRepository.deleteBloodPressureData(event.id)
+            }
+
             else -> {
 
             }
@@ -108,4 +117,10 @@ sealed class BloodPressureEvent : CommonEvent() {
     object GetBloodPressureInit : BloodPressureEvent()
     object NextMonthPressure : BloodPressureEvent()
     object BeforeMonthPressure : BloodPressureEvent()
+    class EditPressureEvent(val id: Long) : BloodPressureEvent()
+    class DeletePressureEvent(val id: Long) : BloodPressureEvent()
+}
+
+sealed class BloodPressureEffect : IEffect {
+    class GoEditEffect(val id: Long) : BloodPressureEffect()
 }

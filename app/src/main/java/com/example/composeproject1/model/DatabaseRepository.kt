@@ -159,7 +159,7 @@ object DatabaseRepository {
 
     }
 
-    fun saveBloodPressureData(
+    private fun saveBloodPressureData(
         bloodHeight: Int,
         bloodLow: Int,
         heartBeat: Int,
@@ -200,6 +200,18 @@ object DatabaseRepository {
                     )
                 )
             }
+        }
+    }
+
+    fun deleteBloodPressureData(id: Long) {
+        scope.launch {
+            bloodPressureDao.deleteBloodPressureById(id)
+        }
+    }
+
+    suspend fun getBloodPressureById(id: Long): BloodPressureData? {
+        return withContext(Dispatchers.IO) {
+            return@withContext bloodPressureDao.fetchBloodPressureById(id = id).getOrNull(0)
         }
     }
 }
