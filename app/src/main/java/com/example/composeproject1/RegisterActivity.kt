@@ -56,7 +56,7 @@ class RegisterActivity : ComponentActivity() {
         ) {
 
             Spacer(modifier = Modifier.height(20.dp))
-            Text(text = "注册", fontSize = 25.sp, color = Color.Black)
+            Text(text = "註冊", fontSize = 25.sp, color = Color.Black)
             var account by remember {
                 mutableStateOf("")
             }
@@ -88,34 +88,34 @@ class RegisterActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .padding(horizontal = 30.dp)
             ) {
-                Text(text = "注册")
+                Text(text = "註冊")
             }
         }
     }
 
     private fun startRegister(account: String, password: String, confirmPassword: String) {
         if (password != confirmPassword) {
-            ToastUtils.shortToast("两次密码不一致")
+            ToastUtils.shortToast("兩次密碼不一致")
             return
         }
         if (password.isEmpty()) {
-            ToastUtils.shortToast("密码不能为空")
+            ToastUtils.shortToast("密碼不能為空")
             return
         }
         if (account.isEmpty()) {
-            ToastUtils.shortToast("账号不能为空")
+            ToastUtils.shortToast("帳號不能為空")
             return
         }
         lifecycleScope.launch {
             DatabaseRepository.hasUserAccount(account).let {
                 if (it) {
                     withContext(Dispatchers.Main) {
-                        ToastUtils.shortToast("账号已存在")
+                        ToastUtils.shortToast("帳號已存在")
                     }
                 } else {
                     DatabaseRepository.insertUser(account, password)
                     withContext(Dispatchers.Main) {
-                        ToastUtils.shortToast("注册成功")
+                        ToastUtils.shortToast("註冊成功")
                         finish()
                     }
                 }
@@ -129,11 +129,11 @@ class RegisterActivity : ComponentActivity() {
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.AccountBox,
-                    contentDescription = "账号"
+                    contentDescription = "帳號"
                 )
             },
             placeholder = {
-                Text(text = "请输入账号", fontSize = 15.sp)
+                Text(text = "請輸入帳號", fontSize = 15.sp)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -156,11 +156,11 @@ class RegisterActivity : ComponentActivity() {
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Password,
-                    contentDescription = "密码"
+                    contentDescription = "密碼"
                 )
             },
             placeholder = {
-                Text(text = "请输入密码", fontSize = 15.sp)
+                Text(text = "請輸入密碼", fontSize = 15.sp)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -182,11 +182,11 @@ class RegisterActivity : ComponentActivity() {
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.ConfirmationNumber,
-                    contentDescription = "确认密码"
+                    contentDescription = "確認密碼"
                 )
             },
             placeholder = {
-                Text(text = "请再次输入密码", fontSize = 15.sp)
+                Text(text = "請再次輸入密碼", fontSize = 15.sp)
             },
             modifier = Modifier.fillMaxWidth(),
 

@@ -32,9 +32,9 @@ public class Task extends AsyncTask<String, Void, String> {
 
     /***
      *
-     * 通过API请求数据
-     * @param strings :从主线程中执行子线程传入的字符串，即cityName
-     * @return        :请求API之后返回的JSON格式数据
+     * 通過API請求數據
+     * @param strings :從主線程中執行子線程傳入的字符串，即cityName
+     * @return        :請求API之後返回的JSON格式數據
      */
     @Override
     protected String doInBackground(String... strings) {
@@ -42,53 +42,53 @@ public class Task extends AsyncTask<String, Void, String> {
 
         OkHttpClient client = new OkHttpClient();
 
-        // 替换为模拟错误的 URL
-        String apiUrl = "https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=595c99b1-c44e-43e7-9398-a010e424e212"; // 模拟错误的 URL
+        // 替換為模擬錯誤的 URL
+        String apiUrl = "https://data.moenv.gov.tw/api/v2/aqx_p_432?api_key=595c99b1-c44e-43e7-9398-a010e424e212"; // 模擬錯誤的 URL
 
-        // 构建请求对象
+        // 構建請求對象
         Request request = new Request.Builder()
                 .url(apiUrl)
                 .addHeader("Content-Type", "text/html;charset=utf-8")
                 .build();
 
         try {
-            // 执行请求
+            // 執行請求
             Log.d("MyApp", "Sending network request...");
             Response response = client.newCall(request).execute();
 
             if (response.isSuccessful()) {
-                // 读取响应数据
+                // 讀取響應數據
                 String result = response.body().string();
                 Log.d("MyApp", "Network request successful"+result);
                 return result;
             } else {
-                // 处理错误情况
-                // 获取错误状态码
+                // 處理錯誤情況
+                // 獲取錯誤狀態碼
                 int errorCode = response.code();
 
-                // 获取错误消息
+                // 獲取錯誤消息
                 String errorMessage = response.message();
 
-                // 在日志中记录错误信息
+                // 在日誌中紀錄錯誤信息
                 Log.e("NetworkError", "Error code: " + errorCode + ", Message: " + errorMessage);
 
-                // 根据错误情况提供反馈给用户
+                // 根據錯誤情況提供反饋給用戶
                 if (errorCode == 404) {
-                    // 显示资源未找到的错误消息
+                    // 顯示資源未找到的錯誤消息
                     Log.d("MyApp", "Resource not found");
                     return "Resource not found";
                 } else {
-                    // 显示通用错误消息
+                    // 顯示通用錯誤消息
                     Log.d("MyApp", "An error occurred");
                     return "An error occurred";
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // 网络请求发生异常
-            // 在日志中记录异常信息
+            // 網路請求發生異常
+            // 在日誌中紀錄異常信息
             Log.e("NetworkError", "Request error: " + e.getMessage());
-            // 返回错误消息
+            // 返回錯誤消息
             Log.d("MyApp", "Network request failed");
             return "Network request failed";
         }
@@ -99,8 +99,8 @@ public class Task extends AsyncTask<String, Void, String> {
 
     /***
      *
-     * 解析返回的数据
-     * @param s   :请求之后返回的数据
+     * 解析返回的數據
+     * @param s   :請求之后返回的數據
      */
     @Override
     protected void onPostExecute(String s) {

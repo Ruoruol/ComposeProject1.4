@@ -62,7 +62,7 @@ class Myhome : AppCompatActivity() {
                     startActivity(intent1)
                     finish()
                 }) {
-                // 跳转到登录页面
+                // 跳轉到登入頁面
                 AndroidViewBinding(ActivityMainBinding::inflate) {
                     initView(this)
                 }

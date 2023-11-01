@@ -13,19 +13,19 @@ import android.util.Log;
 import com.example.composeproject1.model.DatabaseRepository;
 
 public class AlarmTimer {
-    // 周期性的闹钟
+    // 週期性的鬧鐘
     public final static String TIMER_ACTION_REPEATING = "com.e_eduspace.TIMER_ACTION_REPEATING";
-    // 定时闹钟
+    // 定時鬧鐘
     public final static String TIMER_ACTION = "com.e_eduspace.TIMER_ACTION";
 
     /**
-     * 设置周期性闹钟
+     * 設置週期鬧鐘
      *
      * @param context
      * @param firstTime
      * @param cycTime
      * @param action
-     * @param AlarmManagerType 闹钟的类型，常用的有5个值：AlarmManager.ELAPSED_REALTIME、
+     * @param AlarmManagerType 鬧鐘的類型，常用的有5個值：AlarmManager.ELAPSED_REALTIME、
      *                         AlarmManager.ELAPSED_REALTIME_WAKEUP、AlarmManager.RTC、
      *                         AlarmManager.RTC_WAKEUP、AlarmManager.POWER_OFF_WAKEUP
      */
@@ -36,16 +36,16 @@ public class AlarmTimer {
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, myIntent, PendingIntent.FLAG_IMMUTABLE);
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.setRepeating(AlarmManagerType, firstTime, cycTime, sender);
-        //param1：闹钟类型，param1：闹钟首次执行时间，param1：闹钟两次执行的间隔时间，param1：闹钟响应动作。
+        //param1：鬧鐘類型，param1：鬧鐘首次執行時間，param1：鬧鐘兩次執行的間隔時間，param1：鬧鐘響應動作。
     }
 
     /**
-     * 设置定时闹钟
+     * 設置定時鬧鐘
      *
      * @param context
      * @param cycTime
      * @param action
-     * @param AlarmManagerType 闹钟的类型，常用的有5个值：AlarmManager.ELAPSED_REALTIME、
+     * @param AlarmManagerType 鬧鐘的類型，常用的有5個值：AlarmManager.ELAPSED_REALTIME、
      *                         AlarmManager.ELAPSED_REALTIME_WAKEUP、AlarmManager.RTC、
      *                         AlarmManager.RTC_WAKEUP、AlarmManager.POWER_OFF_WAKEUP
      */
@@ -68,7 +68,7 @@ public class AlarmTimer {
     }
 
     /**
-     * 取消闹钟
+     * 取消鬧鐘
      *
      * @param context
      * @param action
