@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.composeproject1.App
 import com.example.composeproject1.database.MedicationData
@@ -34,7 +35,7 @@ fun MedicationListScreen(
     LazyColumn(Modifier.fillMaxWidth()) {
 
         items(1) {
-            Text(text = "等待通知:", modifier = Modifier.padding(top = 14.dp))
+            Text(text = "等待通知:", modifier = Modifier.padding(top = 14.dp), fontSize = 30.sp)
         }
         items(dataList.size) {
             MedicationItem(
@@ -46,7 +47,7 @@ fun MedicationListScreen(
 
         }
         items(1) {
-            Text(text = "過期通知:", modifier = Modifier.padding(top = 14.dp))
+            Text(text = "過期通知:", modifier = Modifier.padding(top = 14.dp), fontSize = 30.sp)
         }
         items(invalidList.size) {
             MedicationItem(
@@ -112,7 +113,7 @@ fun MedicationItem(
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }) {
-                Text(text = "刪除")
+                Text(text = "刪除", fontSize = 20.sp)
             }
 
         }
