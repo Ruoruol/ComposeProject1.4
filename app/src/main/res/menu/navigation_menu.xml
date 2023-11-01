@@ -20,7 +20,7 @@
 
         <item
             android:id="@+id/bt05"
-            android:title="心律睡眠" />
+            android:title="血壓紀錄" />
 
         <item
             android:id="@+id/bt06"

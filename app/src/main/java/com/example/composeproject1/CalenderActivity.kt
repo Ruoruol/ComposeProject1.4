@@ -88,12 +88,12 @@ class CalenderActivity : AppCompatActivity() {
             //GetCurrentMonth()
         })
         binding.btReceiveMedicine.setOnClickListener(View.OnClickListener {
-            val appointmentType = "拿藥" // 預約類型為 "回診"
+            val appointmentType = "拿藥" // 預約類型為 "拿藥"
             addItem(appointmentType, selectedDate)
             //  GetCurrentMonth()
         })
         binding.btRehabilitation.setOnClickListener(View.OnClickListener {
-            val appointmentType = "復健" // 預約類型為 "回診"
+            val appointmentType = "復健" // 預約類型為 "復健"
             addItem(appointmentType, selectedDate)
             // GetCurrentMonth()
         })
@@ -185,7 +185,7 @@ class CalenderActivity : AppCompatActivity() {
             val item = pList[position]
             holder.tv_date.text = sdf.format(Date(item.date).apply {
                 time
-            }) // 使用储存在數據對象中的日期
+            }) // 使用儲存在數據對象中的日期
             holder.tv_item.text = item.item
         }
 
@@ -247,13 +247,13 @@ class CalenderActivity : AppCompatActivity() {
         endDate[year, month, selectedCalendar.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59] =
             59
 
-        // 获取数据
+        // 獲取數據
         lifecycleScope.launch {
             val list = fetchHistoryDataList(startDate.timeInMillis, endDate.timeInMillis)
             withContext(Dispatchers.Main) {
-                // 更新适配器
+                // 更新適配器
                 adapter!!.setItems(list.toMutableList(), selectedDate)
-                recyclerView.smoothScrollToPosition(0) // 滚动到顶部
+                recyclerView.smoothScrollToPosition(0) // 滾動到頂部
             }
         }
 

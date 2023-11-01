@@ -159,7 +159,7 @@ class AlarmReceiver : BroadcastReceiver() {
         // the NotificationChannel class is not in the Support Library.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "行事曆"
-            val descriptionText = "用於用戶预约"
+            val descriptionText = "用於用戶預約"
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(CHANNEL_ID_HISTORY, name, importance).apply {
                 description = descriptionText

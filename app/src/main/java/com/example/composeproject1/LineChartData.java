@@ -61,7 +61,7 @@ public class LineChartData extends AppCompatActivity {
             String json = it.getStringExtra("json");
             MyData p = gson.fromJson(json, MyData.class);
             id = p.id;
-            user_id = p.user_id;  // 获取用户的 ID
+            user_id = p.user_id;  // 獲取用户的 ID
             spinner.getSelectedItem();
             et_high.setText(p.high);
             et_low.setText(p.low);

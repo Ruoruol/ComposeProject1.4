@@ -279,12 +279,12 @@ class BloodPressure : AppCompatActivity() {
         }
 
         // 自定義收縮壓線的樣式
-        val systolicDataSet = LineDataSet(ArrayList(), "收缩壓")
+        val systolicDataSet = LineDataSet(ArrayList(), "收縮壓")
         systolicDataSet.color = Color.RED
         systolicDataSet.setCircleColor(Color.RED)
 
         // 自定義舒張壓線的樣式
-        val diastolicDataSet = LineDataSet(ArrayList(), "舒张壓")
+        val diastolicDataSet = LineDataSet(ArrayList(), "舒張壓")
         diastolicDataSet.color = Color.BLUE
         diastolicDataSet.setCircleColor(Color.BLUE)
 
@@ -340,10 +340,10 @@ class BloodPressure : AppCompatActivity() {
         var systolicDataSet = lineData.getDataSetByIndex(0) as LineDataSet
         var diastolicDataSet = lineData.getDataSetByIndex(1) as LineDataSet
         if (systolicDataSet == null) {
-            systolicDataSet = LineDataSet(systolicEntries, "收缩壓")
+            systolicDataSet = LineDataSet(systolicEntries, "收縮壓")
             systolicDataSet.color = Color.RED
             systolicDataSet.setCircleColor(Color.RED)
-            systolicDataSet.label = "收缩壓"
+            systolicDataSet.label = "收縮壓"
             lineData.addDataSet(systolicDataSet)
         } else {
             systolicDataSet.values = systolicEntries

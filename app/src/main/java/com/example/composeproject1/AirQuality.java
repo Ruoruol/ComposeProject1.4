@@ -77,7 +77,7 @@ public class AirQuality extends AppCompatActivity {
                 } else if (id == R.id.bt05) {
                     Intent it = new Intent(AirQuality.this, HeartSleep.class);
                     startActivity(it);
-                    Toast.makeText(AirQuality.this, "心律睡眠", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AirQuality.this, "血壓紀錄", Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (id == R.id.bt06) {
                     Intent it = new Intent(AirQuality.this, Medications.class);

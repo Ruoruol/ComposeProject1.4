@@ -166,7 +166,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ArrayList<MyData> dataList = new ArrayList<>();
 
         int yearValue = year.get(Calendar.YEAR);
-        int monthValue = month.get(Calendar.MONTH) + 1; // Calendar 中的月份是从 0 开始的，所以要加 1
+        int monthValue = month.get(Calendar.MONTH) + 1; // Calendar 中的月份是從 0 開始的，所以要加 1
 
 
         // 构建查询条件

@@ -42,7 +42,7 @@ object ResourceGlobalRepository {
             targetClazz = AirQualityActivity::class.java
         ),
         DrawerData(
-            "心律睡眠",
+            "血壓紀錄",
             imageVector = Icons.Default.ModeNight,
             targetClazz = BloodPressure::class.java
         ),
