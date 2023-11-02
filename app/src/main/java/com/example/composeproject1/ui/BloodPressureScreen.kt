@@ -222,17 +222,12 @@ fun BloodPressureChart(
             .fillMaxWidth()
             .fillMaxHeight(0.5f),
         update = {
-            val maxDay = Calendar.getInstance().apply {
-                set(Calendar.YEAR, year)
-                set(Calendar.MONTH, month)
-            }.getActualMaximum(Calendar.DAY_OF_MONTH)
             it.xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     // 假设X轴的值为日期的时间戳（毫秒）
                     val calendar = Calendar.getInstance()
                     val day = value.toInt() / 3 + 1
                     val desc = value.toInt() % 3
-                    Log.i("msgddd","desc $desc")
                     calendar.set(year, month, day)
                     val dateFormat = SimpleDateFormat("MM/dd")
                     return "${dateFormat.format(calendar.time)}${if (desc == 0) "上" else if (desc == 1) "中" else "晚"}"
