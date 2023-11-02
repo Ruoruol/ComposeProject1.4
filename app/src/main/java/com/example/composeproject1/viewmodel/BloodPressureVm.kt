@@ -12,8 +12,10 @@ import com.example.composeproject1.model.AppGlobalRepository
 import com.example.composeproject1.model.DatabaseRepository
 import com.example.composeproject1.mvi.CommonEvent
 import com.example.composeproject1.mvi.IEffect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 
 class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(application) {
@@ -48,24 +50,31 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
                 maxDayTimeInMillis
             ).collectLatest { pressureData ->
                 pressureData.let { bloodPressureList ->
-                    val list = bloodPressureList.toList().sortedBy {
-                        it.year * 100000 + it.month * 1000 + it.day * 10 + it.bloodPressureDayDesc
+                    withContext(Dispatchers.IO) {
+                        val list: List<BloodPressureData> = bloodPressureList.toList().sortedBy {
+                            it.year * 100000 + it.month * 1000 + it.day * 10 + it.bloodPressureDayDesc
+                        }
+                        val sysList = list.map { bloodPressureData ->
+                            cleaner.timeInMillis = bloodPressureData.bloodPressureTime
+                            val descFloat = (bloodPressureData.bloodPressureDayDesc * 3) / 10.0f
+                            val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
+                            val y = bloodPressureData.bloodPressureHigh.toFloat()
+                            Log.i("msgdddd", "day $x")
+                            (x + descFloat) to y
+                        }
+                        val diaList = list.map { bloodPressureData ->
+                            cleaner.timeInMillis = bloodPressureData.bloodPressureTime
+                            val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
+                            val y = bloodPressureData.bloodPressureLow.toFloat()
+                            x to y
+                        }
+                        withContext(Dispatchers.Main) {
+                            dataList = list
+                            systolicPointList = sysList
+                            diastolicPointList = diaList
+                        }
                     }
-                    dataList = list
-                    systolicPointList = list.map { bloodPressureData ->
-                        cleaner.timeInMillis = bloodPressureData.bloodPressureTime
-                        val descFloat = (bloodPressureData.bloodPressureDayDesc * 3) / 10.0f
-                        val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
-                        val y = bloodPressureData.bloodPressureHigh.toFloat()
-                        Log.i("msgdddd", "day $x")
-                        (x + descFloat) to y
-                    }
-                    diastolicPointList = list.map { bloodPressureData ->
-                        cleaner.timeInMillis = bloodPressureData.bloodPressureTime
-                        val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
-                        val y = bloodPressureData.bloodPressureLow.toFloat()
-                        x to y
-                    }
+
                 }
             }
         }
