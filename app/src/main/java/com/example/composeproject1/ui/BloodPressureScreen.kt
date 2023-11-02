@@ -326,19 +326,19 @@ fun BloodPressureChart(
             var systolicDataSet = lineData.getDataSetByIndex(0) as? LineDataSet
             var diastolicDataSet = lineData.getDataSetByIndex(1) as? LineDataSet
             if (systolicDataSet == null) {
-                systolicDataSet = LineDataSet(systolicPointList.toLineEntries(), "收縮壓")
+                systolicDataSet = LineDataSet(systolicPointList.toLineEntries(), "舒張壓")
                 systolicDataSet.color = android.graphics.Color.RED
                 systolicDataSet.setCircleColor(android.graphics.Color.RED)
-                systolicDataSet.label = "收縮壓"
+                systolicDataSet.label = "舒張壓"
                 lineData.addDataSet(systolicDataSet)
             } else {
                 systolicDataSet.values = systolicPointList.toLineEntries()
             }
             if (diastolicDataSet == null) {
-                diastolicDataSet = LineDataSet(diastolicPointList.toLineEntries(), "舒張壓")
+                diastolicDataSet = LineDataSet(diastolicPointList.toLineEntries(), "收縮壓")
                 diastolicDataSet.color = android.graphics.Color.BLUE
                 diastolicDataSet.setCircleColor(android.graphics.Color.BLUE)
-                diastolicDataSet.label = "舒張壓"
+                diastolicDataSet.label = "收縮壓"
                 lineData.addDataSet(diastolicDataSet)
             } else {
                 diastolicDataSet.values = diastolicPointList.toLineEntries()
