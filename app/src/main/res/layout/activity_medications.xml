@@ -61,9 +61,9 @@
                 android:layout_height="wrap_content"
                 android:timePickerMode="spinner"
                 android:layout_gravity="center"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                android:layout_marginLeft="-30dp"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:layout_marginLeft="-33dp"
                 android:layout_marginRight="-30dp"/>
         </LinearLayout>
 
