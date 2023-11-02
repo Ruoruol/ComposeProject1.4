@@ -165,20 +165,9 @@ class LineChartData : AppCompatActivity() {
         val year = calendar[Calendar.YEAR]
         val month = calendar[Calendar.MONTH] + 1 // 0 ~ 11
         val day = calendar[Calendar.DAY_OF_MONTH]
-        val dayOfWeekString = getDayOfWeekString(day)
-        return String.format("%04d-%02d-%02d (%s)", year, month, day, dayOfWeekString)
+
+        return String.format("%04d-%02d-%02d", year, month, day)
     }
 
-    private fun getDayOfWeekString(dayOfWeek: Int): String {
-        return when (dayOfWeek) {
-            Calendar.SUNDAY -> "星期日"
-            Calendar.MONDAY -> "星期一"
-            Calendar.TUESDAY -> "星期二"
-            Calendar.WEDNESDAY -> "星期三"
-            Calendar.THURSDAY -> "星期四"
-            Calendar.FRIDAY -> "星期五"
-            Calendar.SATURDAY -> "星期六"
-            else -> ""
-        }
-    }
+
 }
