@@ -56,18 +56,15 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
                         }
                         val sysList = list.map { bloodPressureData ->
                             cleaner.timeInMillis = bloodPressureData.bloodPressureTime
-                            val descFloat = (bloodPressureData.bloodPressureDayDesc * 3) / 10.0f
-                            val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
+                            val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat() - 1
                             val y = bloodPressureData.bloodPressureHigh.toFloat()
-                            Log.i("msgdddd", "day $x")
-                            (x + descFloat) to y
+                            (x * 3 + bloodPressureData.bloodPressureDayDesc) to y
                         }
                         val diaList = list.map { bloodPressureData ->
                             cleaner.timeInMillis = bloodPressureData.bloodPressureTime
-                            val descFloat = (bloodPressureData.bloodPressureDayDesc * 3) / 10.0f
-                            val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat()
+                            val x = cleaner.get(Calendar.DAY_OF_MONTH).toFloat() - 1
                             val y = bloodPressureData.bloodPressureLow.toFloat()
-                            x +descFloat to y
+                            (x * 3 + bloodPressureData.bloodPressureDayDesc) to y
                         }
                         withContext(Dispatchers.Main) {
                             dataList = list

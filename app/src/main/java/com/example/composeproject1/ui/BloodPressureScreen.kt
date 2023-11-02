@@ -65,7 +65,9 @@ fun BloodPressureScreen(
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize().background(color = Purple40),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Purple40),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val year = remember(time) {
@@ -220,15 +222,20 @@ fun BloodPressureChart(
             .fillMaxWidth()
             .fillMaxHeight(0.5f),
         update = {
+            val maxDay = Calendar.getInstance().apply {
+                set(Calendar.YEAR, year)
+                set(Calendar.MONTH, month)
+            }.getActualMaximum(Calendar.DAY_OF_MONTH)
             it.xAxis.valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     // 假设X轴的值为日期的时间戳（毫秒）
                     val calendar = Calendar.getInstance()
-                    val day = value.toInt()
-                    val descFloat = ((value - day) * 10).toInt()
+                    val day = value.toInt() / 3 + 1
+                    val desc = value.toInt() % 3
+                    Log.i("msgddd","desc $desc")
                     calendar.set(year, month, day)
                     val dateFormat = SimpleDateFormat("MM/dd")
-                    return "${dateFormat.format(calendar.time)}${if (descFloat == 0) "上" else if (descFloat == 3) "中" else if (descFloat == 6) "晚" else ""}"
+                    return "${dateFormat.format(calendar.time)}${if (desc == 0) "上" else if (desc == 1) "中" else "晚"}"
                 }
             }
             val lineData = it.lineData
@@ -275,6 +282,7 @@ private fun LineChart.initLineChart() {
     setPinchZoom(true) // 啟用縮放手勢
     // 設置X軸標籤的位置
     xAxis.position = XAxis.XAxisPosition.BOTTOM
+    xAxis.granularity = 1f
     // 自定義X軸標籤的間隔
 
     // 自定義收縮壓線的樣式
