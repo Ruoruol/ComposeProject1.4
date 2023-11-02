@@ -1,7 +1,6 @@
 package com.example.composeproject1.ui
 
 import android.content.Intent
-import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.compose.foundation.background
@@ -18,18 +17,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +49,6 @@ import com.example.composeproject1.Action
 import com.example.composeproject1.LineChartData
 import com.example.composeproject1.database.BloodPressureData
 import com.example.composeproject1.mvi.CommonEvent
-import com.example.composeproject1.ui.theme.ComposeProject1Theme
 import com.example.composeproject1.ui.theme.PrimaryColor
 import com.example.composeproject1.ui.theme.Purple40
 import com.example.composeproject1.viewmodel.BloodPressureEvent
@@ -85,30 +93,67 @@ fun BloodPressureScreen(
             Text(text = " $year 年  ${month + 1} 月", color = PrimaryColor, fontSize = 24.sp)
             BloodPressureChart(year, month, systolicPointList, diastolicPointList)
             BloodPressureList()
-            ItemListScreen(dataList, onEvent)
+            ItemListScreen(dataList = dataList, onEvent = onEvent)
         }
         val context = LocalContext.current
-        FloatingActionButton(
-            onClick = {
-                context.startActivity(Intent(context, LineChartData::class.java).apply {
-                    putExtra("action", Action.NEW)
-                    // 將用戶的 ID 傳遞给 linechart 頁面
-                    putExtra("user_id", userId)
-                })
-            }, backgroundColor = PrimaryColor, modifier = Modifier
+        var isShow by remember {
+            mutableStateOf(false)
+        }
+        Column(
+            modifier = Modifier
                 .align(
                     Alignment.BottomEnd
                 )
                 .padding(end = 20.dp, bottom = 50.dp)
         ) {
-            Icon(imageVector = Icons.Default.Add, contentDescription = "添加", tint = Color.White)
+            FloatingActionButton(
+                onClick = {
+                    isShow = true
+                }, backgroundColor = PrimaryColor, modifier = Modifier
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardDoubleArrowUp,
+                    contentDescription = "上升",
+                    tint = Color.White
+                )
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+
+            FloatingActionButton(
+                onClick = {
+                    context.startActivity(Intent(context, LineChartData::class.java).apply {
+                        putExtra("action", Action.NEW)
+                        // 將用戶的 ID 傳遞给 linechart 頁面
+                        putExtra("user_id", userId)
+                    })
+                }, backgroundColor = PrimaryColor, modifier = Modifier
+
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "添加",
+                    tint = Color.White
+                )
+            }
         }
+        BottomSheetPressure(
+            isShow = isShow,
+            dataList = dataList,
+            requestShowHideFunc = {
+                isShow = it
+            },
+            onEvent
+        )
     }
 }
 
 @Composable
-fun ItemListScreen(dataList: List<BloodPressureData>, onEvent: (BloodPressureEvent) -> Unit) {
-    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+fun ItemListScreen(
+    modifier: Modifier = Modifier,
+    dataList: List<BloodPressureData>,
+    onEvent: (BloodPressureEvent) -> Unit
+) {
+    LazyColumn(modifier = modifier.fillMaxWidth()) {
         items(dataList) { bloodPressureData ->
             Column(
                 modifier = Modifier
@@ -164,6 +209,50 @@ fun ItemListScreen(dataList: List<BloodPressureData>, onEvent: (BloodPressureEve
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun BottomSheetPressure(
+    isShow: Boolean,
+    dataList: List<BloodPressureData>,
+    requestShowHideFunc: (isShow: Boolean) -> Unit,
+    onEvent: (BloodPressureEvent) -> Unit
+) {
+    val sheetState =
+        rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    LaunchedEffect(sheetState.isVisible) {
+        requestShowHideFunc.invoke(sheetState.isVisible)
+    }
+    LaunchedEffect(key1 = isShow) {
+        if (isShow) {
+            if (!sheetState.isVisible) {
+                sheetState.show()
+            }
+        } else {
+            if (sheetState.isVisible) {
+                sheetState.hide()
+            }
+        }
+    }
+
+    ModalBottomSheetLayout(
+        sheetBackgroundColor = Color.Transparent,
+        sheetGesturesEnabled = true,
+        sheetShape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
+        sheetContent = {
+            ItemListScreen(
+                modifier = Modifier
+                    .fillMaxHeight(0.75f)
+                    .background(
+                        Purple40
+                    ), dataList, onEvent
+            )
+        },
+        sheetState = sheetState
+    ) {}
+
+
 }
 
 @Composable
