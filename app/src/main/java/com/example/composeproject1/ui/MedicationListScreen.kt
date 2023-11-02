@@ -3,6 +3,7 @@ package com.example.composeproject1.ui
 import android.text.format.DateFormat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import com.example.composeproject1.database.MedicationData
 import com.example.composeproject1.ui.theme.DeleteColor
 import com.example.composeproject1.ui.theme.InvalidColor
 import com.example.composeproject1.ui.theme.PrimaryColor
+import com.example.composeproject1.ui.theme.Purple40
 import com.example.composeproject1.viewmodel.MedicationListEvent
 import java.sql.Date
 
@@ -31,8 +33,9 @@ fun MedicationListScreen(
     dataList: List<MedicationData>,
     invalidList: List<MedicationData>,
     onEvent: (MedicationListEvent) -> Unit
+
 ) {
-    LazyColumn(Modifier.fillMaxWidth()) {
+    LazyColumn(Modifier.fillMaxSize().background(color = Purple40)) {
 
         items(1) {
             Text(text = "等待通知:", modifier = Modifier.padding(top = 14.dp), fontSize = 30.sp)
@@ -71,6 +74,8 @@ fun MedicationItem(
         ConstraintLayout(
             modifier = modifier
                 .fillMaxWidth()
+
+
                 .run {
                     if (isInvalid) {
                         background(color = InvalidColor)
@@ -81,12 +86,12 @@ fun MedicationItem(
                 .padding(start = 14.dp, end = 14.dp)
         ) {
             val (title, desc, time, deleteButton) = createRefs()
-            Text(medicationData.title, modifier = Modifier.constrainAs(title) {
+            Text(medicationData.title, fontSize = 25.sp,modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 bottom.linkTo(desc.top)
             })
-            Text(medicationData.description, modifier = Modifier.constrainAs(desc) {
+            Text(medicationData.description, fontSize = 25.sp,modifier = Modifier.constrainAs(desc) {
                 top.linkTo(title.bottom)
                 start.linkTo(parent.start)
                 bottom.linkTo(time.bottom)
@@ -97,7 +102,7 @@ fun MedicationItem(
                 val timeFormat = DateFormat.getTimeFormat(App.appContext)
                 dateFormat.format(date) + " " + timeFormat.format(date)
             }
-            Text(text = "時間：${timeString}", modifier = Modifier.constrainAs(time) {
+            Text(text = "時間：${timeString}", fontSize = 19.sp,modifier = Modifier.constrainAs(time) {
                 top.linkTo(desc.bottom)
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
@@ -113,7 +118,7 @@ fun MedicationItem(
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }) {
-                Text(text = "刪除", fontSize = 20.sp)
+                Text(text = "刪除", fontSize = 20.sp, color= Color.White)
             }
 
         }

@@ -76,11 +76,7 @@ public class Basic extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(Basic.this, "首頁", Toast.LENGTH_SHORT).show();
                     return true;
-                } else if (id == R.id.bt02) {
-                    // 按下「使用說明」要做的事
-                    Toast.makeText(Basic.this, "我的帳號", Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (id == R.id.bt03) {
+                }  else if (id == R.id.bt03) {
                     // 按下「使用說明」要做的事
                     Intent it = new Intent(Basic.this, Basic.class);
                     startActivity(it);

@@ -42,6 +42,7 @@ import com.example.composeproject1.database.BloodPressureData
 import com.example.composeproject1.mvi.CommonEvent
 import com.example.composeproject1.ui.theme.ComposeProject1Theme
 import com.example.composeproject1.ui.theme.PrimaryColor
+import com.example.composeproject1.ui.theme.Purple40
 import com.example.composeproject1.viewmodel.BloodPressureEvent
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
@@ -64,7 +65,7 @@ fun BloodPressureScreen(
 ) {
     Box(Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(color = Purple40),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             val year = remember(time) {
@@ -79,7 +80,7 @@ fun BloodPressureScreen(
             }
             Spacer(modifier = Modifier.height(20.dp))
             BackOrForwardMonth(onEvent)
-            Text(text = "year: $year, month: ${month + 1}", color = PrimaryColor, fontSize = 20.sp)
+            Text(text = " $year 年  ${month + 1} 月", color = PrimaryColor, fontSize = 24.sp)
             BloodPressureChart(year, month, systolicPointList, diastolicPointList)
             BloodPressureList()
             ItemListScreen(dataList, onEvent)
@@ -89,7 +90,7 @@ fun BloodPressureScreen(
             onClick = {
                 context.startActivity(Intent(context, LineChartData::class.java).apply {
                     putExtra("action", Action.NEW)
-                    // 将用户的 ID 传递给 linechart 页面
+                    // 將用戶的 ID 傳遞给 linechart 頁面
                     putExtra("user_id", userId)
                 })
             }, backgroundColor = PrimaryColor, modifier = Modifier
@@ -114,21 +115,24 @@ fun ItemListScreen(dataList: List<BloodPressureData>, onEvent: (BloodPressureEve
                     .padding(10.dp)
             ) {
                 Text(
-                    text = "${bloodPressureData.year}年，${bloodPressureData.month + 1}月，${bloodPressureData.day}日 ${
+                    text = "${bloodPressureData.year}年${bloodPressureData.month + 1}月${bloodPressureData.day}日 ${
                         if (bloodPressureData.bloodPressureDayDesc == 0) "上午" else if (bloodPressureData.bloodPressureDayDesc == 1) "中午" else "晚上"
-                    } 血压数据:"
+                    } 血壓數據:", fontSize = 24.sp
                 )
                 Text(
-                    text = "收缩压: ${bloodPressureData.bloodPressureHigh}",
-                    modifier = Modifier.padding(start = 20.dp)
+                    text = "收縮壓 : ${bloodPressureData.bloodPressureHigh}",
+                    modifier = Modifier.padding(start = 20.dp),
+                    fontSize = 24.sp
                 )
                 Text(
-                    text = "舒张压: ${bloodPressureData.bloodPressureLow}",
-                    modifier = Modifier.padding(start = 20.dp)
+                    text = "舒張壓 : ${bloodPressureData.bloodPressureLow}",
+                    modifier = Modifier.padding(start = 20.dp),
+                    fontSize = 24.sp
                 )
                 Text(
-                    text = "心率: ${bloodPressureData.heartBeat}",
-                    modifier = Modifier.padding(start = 20.dp)
+                    text = "心率 : ${bloodPressureData.heartBeat}",
+                    modifier = Modifier.padding(start = 20.dp),
+                    fontSize = 24.sp
                 )
                 Row(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.weight(1f))
@@ -139,7 +143,7 @@ fun ItemListScreen(dataList: List<BloodPressureData>, onEvent: (BloodPressureEve
                             contentColor = PrimaryColor
                         )
                     ) {
-                        Text(text = "编辑", color = Color.White)
+                        Text(text = "編輯", color = Color.White, fontSize = 26.sp)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                     Button(
@@ -150,7 +154,7 @@ fun ItemListScreen(dataList: List<BloodPressureData>, onEvent: (BloodPressureEve
                             containerColor = Color.Red
                         )
                     ) {
-                        Text(text = "删除", color = Color.White)
+                        Text(text = "刪除", color = Color.White, fontSize = 26.sp)
                     }
                     Spacer(modifier = Modifier.weight(1f))
                 }
@@ -171,7 +175,7 @@ fun BackOrForwardMonth(onEvent: (BloodPressureEvent) -> Unit) {
                 contentColor = PrimaryColor
             )
         ) {
-            Text(text = "上个月", color = Color.White)
+            Text(text = "上個月", color = Color.White, fontSize = 20.sp)
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(
@@ -181,7 +185,7 @@ fun BackOrForwardMonth(onEvent: (BloodPressureEvent) -> Unit) {
                 contentColor = PrimaryColor
             )
         ) {
-            Text(text = "下个月", color = Color.White)
+            Text(text = "下個月", color = Color.White, fontSize = 20.sp)
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(
@@ -191,7 +195,7 @@ fun BackOrForwardMonth(onEvent: (BloodPressureEvent) -> Unit) {
                 contentColor = PrimaryColor
             )
         ) {
-            Text(text = "其他日期", color = Color.White)
+            Text(text = "其他日期", color = Color.White, fontSize = 20.sp)
         }
         Spacer(modifier = Modifier.weight(1f))
 
@@ -231,19 +235,19 @@ fun BloodPressureChart(
             var systolicDataSet = lineData.getDataSetByIndex(0) as? LineDataSet
             var diastolicDataSet = lineData.getDataSetByIndex(1) as? LineDataSet
             if (systolicDataSet == null) {
-                systolicDataSet = LineDataSet(systolicPointList.toLineEntries(), "收缩壓")
+                systolicDataSet = LineDataSet(systolicPointList.toLineEntries(), "收縮壓")
                 systolicDataSet.color = android.graphics.Color.RED
                 systolicDataSet.setCircleColor(android.graphics.Color.RED)
-                systolicDataSet.label = "收缩壓"
+                systolicDataSet.label = "收縮壓"
                 lineData.addDataSet(systolicDataSet)
             } else {
                 systolicDataSet.values = systolicPointList.toLineEntries()
             }
             if (diastolicDataSet == null) {
-                diastolicDataSet = LineDataSet(diastolicPointList.toLineEntries(), "舒张壓")
+                diastolicDataSet = LineDataSet(diastolicPointList.toLineEntries(), "舒張壓")
                 diastolicDataSet.color = android.graphics.Color.BLUE
                 diastolicDataSet.setCircleColor(android.graphics.Color.BLUE)
-                diastolicDataSet.label = "舒张壓"
+                diastolicDataSet.label = "舒張壓"
                 lineData.addDataSet(diastolicDataSet)
             } else {
                 diastolicDataSet.values = diastolicPointList.toLineEntries()
@@ -264,32 +268,32 @@ private fun List<Pair<Float, Float>>.toLineEntries(): List<Entry> {
 private fun LineChart.initLineChart() {
     // 设置折线图的描述
     val description = Description()
-    description.text = "血壓趋势"
+    description.text = "血壓趨勢"
     this.description = description
-    isDragEnabled = true // 允许拖动
-    setScaleEnabled(true) // 允许缩放
-    setPinchZoom(true) // 启用缩放手势
-    // 设置X轴标签的位置
+    isDragEnabled = true // 允許拖動
+    setScaleEnabled(true) // 允許縮放
+    setPinchZoom(true) // 啟用縮放手勢
+    // 設置X軸標籤的位置
     xAxis.position = XAxis.XAxisPosition.BOTTOM
-    // 自定义X轴标签的间隔
+    // 自定義X軸標籤的間隔
 
-    // 自定义收缩压线的样式
-    val systolicDataSet = LineDataSet(ArrayList(), "收缩壓")
+    // 自定義收縮壓線的樣式
+    val systolicDataSet = LineDataSet(ArrayList(), "收縮壓")
     systolicDataSet.color = android.graphics.Color.RED
     systolicDataSet.setCircleColor(android.graphics.Color.RED)
 
-    // 自定义舒张压线的样式
-    val diastolicDataSet = LineDataSet(ArrayList(), "舒张壓")
+    // 自定義舒張壓線的樣式
+    val diastolicDataSet = LineDataSet(ArrayList(), "舒張壓")
     diastolicDataSet.color = android.graphics.Color.BLUE
     diastolicDataSet.setCircleColor(android.graphics.Color.BLUE)
 
 
-    // 添加Y轴的限制线，例如正常范围
-    val normalSystolicRange = LimitLine(120f, "正常范围")
+    // 添加Y軸的限制線，例如正常範圍
+    val normalSystolicRange = LimitLine(120f, "正常範圍")
     normalSystolicRange.lineColor = android.graphics.Color.GREEN
     normalSystolicRange.lineWidth = 2f
     axisLeft.addLimitLine(normalSystolicRange)
-    val normalDiastolicRange = LimitLine(80f, "正常范围")
+    val normalDiastolicRange = LimitLine(80f, "正常範圍")
     normalDiastolicRange.lineColor = android.graphics.Color.GREEN
     normalDiastolicRange.lineWidth = 2f
     axisLeft.addLimitLine(normalDiastolicRange)

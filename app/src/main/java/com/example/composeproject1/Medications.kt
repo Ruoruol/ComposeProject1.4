@@ -2,6 +2,7 @@ package com.example.composeproject1
 
 import android.annotation.SuppressLint
 import android.app.*
+import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.format.DateFormat
@@ -98,6 +99,8 @@ class Medications : AppCompatActivity() {
                                 if (isSuccess) {
                                     Toast.makeText(this@Medications, "新增成功", Toast.LENGTH_SHORT)
                                         .show()
+                                    val intent = Intent(this@Medications, MedicationListActivity::class.java)
+                                    startActivity(intent)
                                     finish()
                                 } else {
                                     Toast.makeText(

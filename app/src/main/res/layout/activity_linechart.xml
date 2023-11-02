@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LineChartData">
+    tools:context=".LineChartData"
+    android:background="#D6D6AD">
 
     <Button
         android:id="@+id/bt_date"

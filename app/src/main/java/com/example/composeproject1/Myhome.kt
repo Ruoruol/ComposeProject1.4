@@ -28,7 +28,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.composeproject1.Medications
-import com.example.composeproject1.Myhome.RCVAdapter.RCVHolder
 import com.example.composeproject1.databinding.ActivityMainBinding
 import com.example.composeproject1.model.AppGlobalRepository
 import com.example.composeproject1.model.AppGlobalRepository.logout
@@ -38,9 +37,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 
 class Myhome : AppCompatActivity() {
-    private val gson = Gson()
-    private lateinit var rcvAdapter: RCVAdapter
-    private val people = ArrayList<People>()
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Log.i("alarm_receiver_log", "onNewIntent ")
@@ -92,11 +89,7 @@ class Myhome : AppCompatActivity() {
     }
 
     private fun initView(binding: ActivityMainBinding) {
-        binding.rcv.layoutManager = LinearLayoutManager(this)
-        val rcvAdapter = RCVAdapter(this, people)
-        binding.rcv.adapter = rcvAdapter
-        val a = People("159", "55", "?")
-        people.add(a)
+
         binding.btMedications.setOnClickListener {
             startActivity(Intent(this@Myhome, Medications::class.java))
         }
@@ -115,76 +108,4 @@ class Myhome : AppCompatActivity() {
         }
     }
 
-    var newLauncher = registerForActivityResult<Intent, ActivityResult>(
-        ActivityResultContracts.StartActivityForResult(),
-        object : ActivityResultCallback<ActivityResult?> {
-            override fun onActivityResult(result: ActivityResult?) {
-                result ?: return
-                if (result.resultCode == RESULT_OK) {
-                    val it = result.data
-                    val json = it!!.getStringExtra("json")
-                    val p = gson.fromJson(json, People::class.java)
-                    people.add(p)
-                    rcvAdapter!!.notifyDataSetChanged()
-                }
-            }
-
-        }
-    )
-    var editLuncher = registerForActivityResult<Intent, ActivityResult>(
-        ActivityResultContracts.StartActivityForResult(),
-        object : ActivityResultCallback<ActivityResult?> {
-            override fun onActivityResult(result: ActivityResult?) {
-                result ?: return
-                if (result.resultCode == RESULT_OK) {
-                    val data = result.data
-                    val json = data!!.getStringExtra("json")
-                    val position = data.getIntExtra("position", -1)
-                    people.removeAt(position)
-                    people.add(position, gson.fromJson(json, People::class.java))
-                    rcvAdapter.notifyDataSetChanged()
-                }
-            }
-        })
-
-
-    inner class RCVAdapter(var context: Context, val pList: ArrayList<People>) :
-        RecyclerView.Adapter<RCVHolder>() {
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RCVHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.people_basic, parent, false)
-            return RCVHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: RCVHolder, position: Int) {
-            holder.tv_tall.text = pList[position].tall
-            holder.tv_weight.text = pList[position].weight
-            holder.tv_BMI.text = pList[position].BMI
-        }
-
-        override fun getItemCount(): Int {
-            return pList.size
-        }
-
-        inner class RCVHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var tv_tall: TextView
-            var tv_weight: TextView
-            var tv_BMI: TextView
-
-            init {
-                tv_tall = itemView.findViewById(R.id.tv_tall)
-                tv_weight = itemView.findViewById(R.id.tv_weight)
-                tv_BMI = itemView.findViewById(R.id.tv_BMI)
-                itemView.setOnClickListener {
-                    val position = adapterPosition
-                    val p = pList[position]
-                    val json = gson.toJson(p)
-                    val it = Intent(this@Myhome, Basic::class.java)
-                    it.putExtra("json", json)
-                    it.putExtra("position", position)
-                    it.putExtra("action", Action.EDIT)
-                    editLuncher.launch(it)
-                }
-            }
-        }
-    }
 }

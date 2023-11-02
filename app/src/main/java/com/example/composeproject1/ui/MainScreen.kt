@@ -1,6 +1,7 @@
 package com.example.composeproject1.ui
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.example.composeproject1.R
 import com.example.composeproject1.bean.AreaEntity
 import com.example.composeproject1.bean.CityAreaBean
+import com.example.composeproject1.ui.theme.Purple40
 import com.example.composeproject1.viewmodel.MainEvent
 
 
@@ -46,7 +48,7 @@ fun MainScreen(
     curQuality: CityAreaBean? = null,
     onEvent: (MainEvent) -> Unit
 ) {
-    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(Modifier.fillMaxSize().background(color = Purple40), horizontalAlignment = Alignment.CenterHorizontally) {
         Row {
             CityText(modifier = Modifier.weight(1f), curSelectCityName, cityList, onEvent = onEvent)
             AreaText(modifier = Modifier.weight(1f), curSelectBean, areaList, onEvent = onEvent)

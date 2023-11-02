@@ -59,10 +59,7 @@ public class AirQuality extends AppCompatActivity {
                     startActivity(it);
                     Toast.makeText(AirQuality.this, "首頁", Toast.LENGTH_SHORT).show();
                     return true;
-                } else if (id == R.id.bt02) {
 
-                    Toast.makeText(AirQuality.this, "我的帳號", Toast.LENGTH_SHORT).show();
-                    return true;
                 } else if (id == R.id.bt03) {
 
                     Intent it = new Intent(AirQuality.this, Basic.class);

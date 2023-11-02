@@ -56,7 +56,7 @@ class RegisterActivity : ComponentActivity() {
         ) {
 
             Spacer(modifier = Modifier.height(20.dp))
-            Text(text = "註冊", fontSize = 25.sp, color = Color.Black)
+            Text(text = "註冊", fontSize = 30.sp, color = Color.Black)
             var account by remember {
                 mutableStateOf("")
             }
@@ -88,7 +88,7 @@ class RegisterActivity : ComponentActivity() {
                     .fillMaxWidth()
                     .padding(horizontal = 30.dp)
             ) {
-                Text(text = "註冊")
+                Text(text = "註冊", fontSize = 20.sp)
             }
         }
     }
@@ -133,7 +133,7 @@ class RegisterActivity : ComponentActivity() {
                 )
             },
             placeholder = {
-                Text(text = "請輸入帳號", fontSize = 15.sp)
+                Text(text = "請輸入帳號", fontSize = 20.sp)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -160,7 +160,7 @@ class RegisterActivity : ComponentActivity() {
                 )
             },
             placeholder = {
-                Text(text = "請輸入密碼", fontSize = 15.sp)
+                Text(text = "請輸入密碼", fontSize = 20.sp)
             },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -186,7 +186,7 @@ class RegisterActivity : ComponentActivity() {
                 )
             },
             placeholder = {
-                Text(text = "請再次輸入密碼", fontSize = 15.sp)
+                Text(text = "請再次輸入密碼", fontSize = 20.sp)
             },
             modifier = Modifier.fillMaxWidth(),
 

@@ -21,7 +21,7 @@ import com.example.composeproject1.MedicationListActivity
 import com.example.composeproject1.Medications
 import com.example.composeproject1.Myhome
 import com.example.composeproject1.bean.DrawerData
-
+//左拉選單
 object ResourceGlobalRepository {
     private val DRAWER_LIST = listOf(
         DrawerData(
@@ -29,14 +29,6 @@ object ResourceGlobalRepository {
             Myhome::class.java,
             imageVector = Icons.Default.Home,
             Intent.FLAG_ACTIVITY_CLEAR_TOP
-        ),
-        DrawerData(
-            "我的帳號", imageVector = Icons.Default.AccountBox,
-            targetClazz = EmptyActivity::class.java
-        ),
-        DrawerData(
-            "基本資料", imageVector = Icons.Default.Person2,
-            targetClazz = EmptyActivity::class.java
         ),
         DrawerData(
             "空氣品質", imageVector = Icons.Default.Bedtime,

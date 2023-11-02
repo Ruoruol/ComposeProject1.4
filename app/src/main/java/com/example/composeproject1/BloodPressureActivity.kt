@@ -26,10 +26,10 @@ class BloodPressureActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WeTemplateScreen(
-                topTitle = "心律睡眠",
+                topTitle = "血壓紀錄",
                 drawerGesturesEnabled = false,
                 defaultIndex = remember {
-                    ResourceGlobalRepository.getIndexByName("心律睡眠")
+                    ResourceGlobalRepository.getIndexByName("血壓紀錄")
                 },
                 clickBack = { finish() }) {
                 BloodPressureScreen(

@@ -6,9 +6,7 @@
             android:title="首頁"
             />
 
-        <item
-            android:id="@+id/bt02"
-            android:title="我的帳號" />
+
 
         <item
             android:id="@+id/bt03"
