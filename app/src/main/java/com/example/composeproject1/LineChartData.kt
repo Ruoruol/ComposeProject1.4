@@ -107,12 +107,16 @@ class LineChartData : AppCompatActivity() {
                 "晚上" -> 2
                 else -> -1
             }
+            val calendar = Calendar.getInstance().apply {
+                timeInMillis = selectedDate
+                set(Calendar.HOUR_OF_DAY, if (desc == 0) 8 else if (desc == 1) 12 else 18)
+            }
             saveBloodPressureData(
                 high,
                 low,
                 heartRate,
                 desc,
-                selectedDate,
+                calendar.timeInMillis,
                 finalUser_id
             )
             finish()

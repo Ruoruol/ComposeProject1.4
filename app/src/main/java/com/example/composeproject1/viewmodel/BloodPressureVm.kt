@@ -37,11 +37,17 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
             set(Calendar.YEAR, currentYear)
             set(Calendar.MONTH, currentMonth)
             set(Calendar.DAY_OF_MONTH, maxDay)
+            set(Calendar.HOUR_OF_DAY, 23)
+            set(Calendar.MINUTE, 59)
+            set(Calendar.SECOND, 59)
         }.timeInMillis
         val minDayTimeInMillis = Calendar.getInstance().apply {
             set(Calendar.YEAR, currentYear)
             set(Calendar.MONTH, currentMonth)
             set(Calendar.DAY_OF_MONTH, 1)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
         }.timeInMillis
         viewModelScope.launch {
             DatabaseRepository.getBloodPressureListBetween(
