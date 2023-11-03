@@ -13,6 +13,7 @@ import com.example.composeproject1.model.DatabaseRepository
 import com.example.composeproject1.mvi.CommonEvent
 import com.example.composeproject1.mvi.IEffect
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -23,6 +24,8 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
     var systolicPointList by mutableStateOf(listOf<Pair<Float, Float>>())
     var diastolicPointList by mutableStateOf(listOf<Pair<Float, Float>>())
     var dataList by mutableStateOf(listOf<BloodPressureData>())
+    var beforeJob: Job? = null
+
     val userId by lazy {
         AppGlobalRepository.userId
     }
@@ -49,7 +52,8 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
         }.timeInMillis
-        viewModelScope.launch {
+        beforeJob?.cancel()
+        beforeJob = viewModelScope.launch {
             DatabaseRepository.getBloodPressureListBetween(
                 userId,
                 minDayTimeInMillis,
