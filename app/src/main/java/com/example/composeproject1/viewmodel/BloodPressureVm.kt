@@ -24,7 +24,7 @@ class BloodPressureVm(application: Application) : BaseVm<BloodPressureEvent>(app
     var systolicPointList by mutableStateOf(listOf<Pair<Float, Float>>())
     var diastolicPointList by mutableStateOf(listOf<Pair<Float, Float>>())
     var dataList by mutableStateOf(listOf<BloodPressureData>())
-    var beforeJob: Job? = null
+    private var beforeJob: Job? = null
 
     val userId by lazy {
         AppGlobalRepository.userId
