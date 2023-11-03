@@ -27,7 +27,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardDoubleArrowUp
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
@@ -38,13 +37,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.alpha
 import com.example.composeproject1.Action
 import com.example.composeproject1.LineChartData
 import com.example.composeproject1.database.BloodPressureData
@@ -381,11 +380,11 @@ private fun LineChart.initLineChart() {
 
 
     // 添加Y軸的限制線，例如正常範圍
-    val normalSystolicRange = LimitLine(120f, "正常範圍")
+    val normalSystolicRange = LimitLine(120f, "收缩压正常範圍")
     normalSystolicRange.lineColor = android.graphics.Color.GREEN
     normalSystolicRange.lineWidth = 2f
     axisLeft.addLimitLine(normalSystolicRange)
-    val normalDiastolicRange = LimitLine(80f, "正常範圍")
+    val normalDiastolicRange = LimitLine(80f, "舒張壓正常範圍")
     normalDiastolicRange.lineColor = android.graphics.Color.GREEN
     normalDiastolicRange.lineWidth = 2f
     axisLeft.addLimitLine(normalDiastolicRange)
