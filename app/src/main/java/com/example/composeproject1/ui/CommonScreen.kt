@@ -321,5 +321,14 @@ fun HomeTemplateScreen(
 @Composable
 @Preview
 fun PreviewNavigationDrawer() {
+    HomeTemplateScreen(
+        topTitle = "首頁",
+        defaultIndex = 0,
+        clickLoginOut = {
+
+        }
+    ) {
+        Text(text = "hi")
+    }
 
 }
