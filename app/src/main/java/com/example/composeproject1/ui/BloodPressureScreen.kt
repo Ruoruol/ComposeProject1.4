@@ -380,7 +380,7 @@ private fun LineChart.initLineChart() {
 
 
     // 添加Y軸的限制線，例如正常範圍
-    val normalSystolicRange = LimitLine(120f, "收缩压正常範圍")
+    val normalSystolicRange = LimitLine(120f, "收縮壓正常範圍")
     normalSystolicRange.lineColor = android.graphics.Color.GREEN
     normalSystolicRange.lineWidth = 2f
     axisLeft.addLimitLine(normalSystolicRange)

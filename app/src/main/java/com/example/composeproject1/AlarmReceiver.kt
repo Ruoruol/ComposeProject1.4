@@ -74,7 +74,7 @@ class AlarmReceiver : BroadcastReceiver() {
                                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.ic_launcher_foreground)
+                            .setSmallIcon(R.drawable.app_logo)
                             .setContentTitle(title ?: "")
                             .setContentText(desc ?: "").setContentIntent(pendingIntent)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setAutoCancel(true)
@@ -117,7 +117,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
             val builder = NotificationCompat.Builder(context, CHANNEL_ID_HISTORY)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.app_logo)
                 .setContentTitle("行事曆")
                 .setContentText(title).setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).setAutoCancel(true)

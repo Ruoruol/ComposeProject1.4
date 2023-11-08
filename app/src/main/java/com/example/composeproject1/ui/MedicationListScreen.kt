@@ -86,12 +86,12 @@ fun MedicationItem(
                 .padding(start = 14.dp, end = 14.dp)
         ) {
             val (title, desc, time, deleteButton) = createRefs()
-            Text(medicationData.title, fontSize = 25.sp,modifier = Modifier.constrainAs(title) {
+            Text(medicationData.title, fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
                 bottom.linkTo(desc.top)
             })
-            Text(medicationData.description, fontSize = 25.sp,modifier = Modifier.constrainAs(desc) {
+            Text(medicationData.description, fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(desc) {
                 top.linkTo(title.bottom)
                 start.linkTo(parent.start)
                 bottom.linkTo(time.bottom)
@@ -102,7 +102,7 @@ fun MedicationItem(
                 val timeFormat = DateFormat.getTimeFormat(App.appContext)
                 dateFormat.format(date) + " " + timeFormat.format(date)
             }
-            Text(text = "時間：${timeString}", fontSize = 19.sp,modifier = Modifier.constrainAs(time) {
+            Text(text = "時間：${timeString}", fontSize = 19.sp, color = Color.White, modifier = Modifier.constrainAs(time) {
                 top.linkTo(desc.bottom)
                 start.linkTo(parent.start)
                 bottom.linkTo(parent.bottom)
