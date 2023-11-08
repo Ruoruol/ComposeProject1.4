@@ -10,6 +10,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -22,6 +23,7 @@ import com.example.composeproject1.AlarmTimer.TIMER_ACTION_REPEATING
 import com.example.composeproject1.model.AppGlobalRepository
 import com.example.composeproject1.model.Constant
 import com.example.composeproject1.model.DatabaseRepository
+import com.example.composeproject1.ui.theme.PrimaryColor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -75,6 +77,8 @@ class AlarmReceiver : BroadcastReceiver() {
                             )
                         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
                             .setSmallIcon(R.drawable.app_logo)
+                            .setColor(Color.parseColor("#FF476f45"))
+                            .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.app_logo))
                             .setContentTitle(title ?: "")
                             .setContentText(desc ?: "").setContentIntent(pendingIntent)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT).setAutoCancel(true)
@@ -118,6 +122,8 @@ class AlarmReceiver : BroadcastReceiver() {
                 )
             val builder = NotificationCompat.Builder(context, CHANNEL_ID_HISTORY)
                 .setSmallIcon(R.drawable.app_logo)
+                .setColor(Color.parseColor("#FF476f45"))
+                .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.drawable.app_logo))
                 .setContentTitle("行事曆")
                 .setContentText(title).setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT).setAutoCancel(true)
