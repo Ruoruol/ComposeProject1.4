@@ -21,12 +21,18 @@
                 android:layout_height="wrap_content"
                 android:hint="Title" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:orientation="horizontal"
             android:paddingHorizontal="20dp"
             android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -34,8 +40,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="例:血壓藥" />
-        </com.google.android.material.textfield.TextInputLayout>
 
+        </com.google.android.material.textfield.TextInputLayout>
+            <Button
+                android:id="@+id/bnSelectMediaction"
+                android:text="选择药品"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </androidx.appcompat.widget.LinearLayoutCompat>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
