@@ -51,12 +51,12 @@ object DatabaseRepository {
     }
     fun setMedicationSetNextTime(medicationData: MedicationData) {
         scope.launch {
-            AppDatabase.getDatabase(App.appContext).medicationDao().setMedicationConsumeCount(medicationData.id)
             val calendar=Calendar.getInstance()
             calendar.timeInMillis=medicationData.time
             calendar.add(Calendar.DAY_OF_MONTH,1)
             AppDatabase.getDatabase(App.appContext).medicationDao().updateMedication(medicationData.copy(
-                time=calendar.timeInMillis
+                time=calendar.timeInMillis,
+                count = medicationData.count-1
             ))
         }
     }

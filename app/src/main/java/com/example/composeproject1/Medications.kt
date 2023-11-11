@@ -130,7 +130,7 @@ class Medications : AppCompatActivity() {
         val desc = binding.messageET.text.toString()
         val time = getTime()
 
-        showAlert(time, title, binding.count.toString().toIntOrNull()?:1,desc)
+        showAlert(time, title, binding.count.text.toString().toIntOrNull()?:1,desc)
     }
 
     private fun showAlert(time: Long, title: String,count:Int, message: String) {
