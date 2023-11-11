@@ -26,5 +26,5 @@ data class MedicationData(
     @ColumnInfo(name = "count")
     val count: Int
 ) {
-    fun isValidOrInTime() = isValid == 1 && time > System.currentTimeMillis() &&count>0
+    fun isValidOrInTime() = isValid == 1 && (time > System.currentTimeMillis()||count>0)
 }
