@@ -7,6 +7,8 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.compose.ui.window.Dialog
@@ -78,10 +81,20 @@ class Medications : AppCompatActivity() {
                     this.bnSelectMediaction.setOnClickListener {
                         isShow=true
                     }
+                    bnA.setOnClickListener {
+                        changeCount(true,count)
+                    }
+                    bnS.setOnClickListener {
+                        changeCount(false,count)
+                    }
                 }
             }
         }
 
+    }
+    private fun changeCount(isAdd:Boolean,editText: TextView){
+        val before=editText.text.toString().toIntOrNull()?:1
+        editText.text = kotlin.math.max(if (isAdd)before+1 else before -1,1).toString()
     }
     @Composable
     fun ShowSelectMedication(isShow:Boolean,dismiss:()->Unit,selectFunc:(String)->Unit){
@@ -117,10 +130,10 @@ class Medications : AppCompatActivity() {
         val desc = binding.messageET.text.toString()
         val time = getTime()
 
-        showAlert(time, title, desc)
+        showAlert(time, title, binding.count.toString().toIntOrNull()?:1,desc)
     }
 
-    private fun showAlert(time: Long, title: String, message: String) {
+    private fun showAlert(time: Long, title: String,count:Int, message: String) {
         //Log.d("CCC", "Scheduled notification with title: $title, message: $message, time: $time")
         val date = Date(time)
         val dateFormat = DateFormat.getLongDateFormat(applicationContext)
@@ -139,7 +152,7 @@ class Medications : AppCompatActivity() {
                 requestAlarmPermission(this) {
                     if (it) {
                         lifecycleScope.launch {
-                            val data = DatabaseRepository.createMedicationData(title, message, time)
+                            val data = DatabaseRepository.createMedicationData(title, message,count ,time)
                             if (data != null) {
                                 val bundle = Bundle().apply {
                                     putString("title", title)

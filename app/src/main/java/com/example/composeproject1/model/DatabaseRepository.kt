@@ -49,10 +49,22 @@ object DatabaseRepository {
             AppDatabase.getDatabase(App.appContext).medicationDao().setMedicationInvalid(id)
         }
     }
+    fun setMedicationSetNextTime(medicationData: MedicationData) {
+        scope.launch {
+            AppDatabase.getDatabase(App.appContext).medicationDao().setMedicationConsumeCount(medicationData.id)
+            val calendar=Calendar.getInstance()
+            calendar.timeInMillis=medicationData.time
+            calendar.add(Calendar.DAY_OF_MONTH,1)
+            AppDatabase.getDatabase(App.appContext).medicationDao().updateMedication(medicationData.copy(
+                time=calendar.timeInMillis
+            ))
+        }
+    }
 
     suspend fun createMedicationData(
         title: String,
         description: String,
+        count:Int,
         time: Long
     ): MedicationData? {
         return withContext(Dispatchers.IO) {
@@ -62,7 +74,8 @@ object DatabaseRepository {
                 title = title,
                 description = description,
                 time = time,
-                isValid = 1
+                isValid = 1,
+                count = count
             )
             AppDatabase.getDatabase(App.appContext).medicationDao().insertMedication(medicationData)
             return@withContext AppDatabase.getDatabase(App.appContext).medicationDao()

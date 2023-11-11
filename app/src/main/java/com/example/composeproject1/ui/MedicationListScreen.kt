@@ -128,7 +128,7 @@ fun MedicationItem(
 @Preview
 @Composable
 fun MedicationListScreenPreview() {
-    MedicationItem(Modifier,false, MedicationData(1, "1", "1", "1", "1", 1, 1)) {
+    MedicationItem(Modifier,false, MedicationData(1, "1", "1", "1", "1", 1,1 ,1)) {
 
     }
 

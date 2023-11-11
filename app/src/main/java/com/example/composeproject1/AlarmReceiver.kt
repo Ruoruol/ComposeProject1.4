@@ -53,8 +53,8 @@ class AlarmReceiver : BroadcastReceiver() {
                 if (id == 0) return
                 scope.launch {
                     val medication = DatabaseRepository.getMedicationById(id) ?: return@launch
-                    if (medication.isValid == 0) return@launch
-                    DatabaseRepository.setMedicationInvalid(id)
+                    if (medication.isValid == 0||medication.count<=0) return@launch
+                    DatabaseRepository.setMedicationSetNextTime(medication)
                     withContext(Dispatchers.Main) {
                         val title = intent.getStringExtra("title")
                         val desc = intent.getStringExtra("desc")
