@@ -74,8 +74,6 @@ fun MedicationItem(
         ConstraintLayout(
             modifier = modifier
                 .fillMaxWidth()
-
-
                 .run {
                     if (isInvalid) {
                         background(color = InvalidColor)
@@ -85,7 +83,7 @@ fun MedicationItem(
                 }
                 .padding(start = 14.dp, end = 14.dp)
         ) {
-            val (title, desc, time, deleteButton) = createRefs()
+            val (title, desc, time, count,deleteButton) = createRefs()
             Text(medicationData.title, fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(title) {
                 top.linkTo(parent.top)
                 start.linkTo(parent.start)
@@ -95,6 +93,11 @@ fun MedicationItem(
                 top.linkTo(title.bottom)
                 start.linkTo(parent.start)
                 bottom.linkTo(time.bottom)
+            })
+            Text(text ="剩余次数: ${medicationData.count}", fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(count) {
+                top.linkTo(desc.bottom)
+                start.linkTo(parent.start)
+                bottom.linkTo(time.top)
             })
             val timeString = remember(medicationData.time) {
                 val date = Date(medicationData.time)
