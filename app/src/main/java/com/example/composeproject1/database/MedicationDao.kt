@@ -3,6 +3,7 @@ package com.example.composeproject1.database
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 
 @Dao
@@ -12,6 +13,8 @@ interface MedicationDao {
 
     @Insert
     fun insertMedication(medicationData: MedicationData)
+    @Update
+    fun updateMedication(medicationData: MedicationData)
 
     @Query("SELECT * FROM medication_data WHERE keyId = :key")
     fun queryMedicationWithKey(key: String): List<MedicationData>
@@ -24,4 +27,7 @@ interface MedicationDao {
 
     @Query("UPDATE medication_data SET isValid=0 WHERE id = :id")
     fun setMedicationInvalid(id: Int)
+
+    @Query("UPDATE medication_data SET count=(count-1) WHERE id = :id")
+    fun setMedicationConsumeCount(id: Int)
 }

@@ -22,7 +22,9 @@ data class MedicationData(
     @ColumnInfo(name = "time")
     val time: Long,
     @ColumnInfo(name = "isValid")
-    val isValid: Int
+    val isValid: Int,
+    @ColumnInfo(name = "count")
+    val count: Int
 ) {
-    fun isValidOrInTime() = isValid == 1 && time > System.currentTimeMillis()
+    fun isValidOrInTime() = isValid == 1 && time > System.currentTimeMillis() &&count>0
 }
