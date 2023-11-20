@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 @SuppressLint("ClickableViewAccessibility")
 fun View.longSeriesClickListener(
-    timeSpace: Int = 200,
+    timeSpace: Int = 300,
     scope: CoroutineScope,
     clickFunc: () -> Unit
 ) {
@@ -34,8 +34,8 @@ fun View.longSeriesClickListener(
             curJob?.cancel()
             curJob = scope.launch(Dispatchers.Main.immediate) {
                 while (isDown) {
-                    clickFunc.invoke()
                     delay(timeSpace.toLong())
+                    clickFunc.invoke()
                 }
             }
         }
