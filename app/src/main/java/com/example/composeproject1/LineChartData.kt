@@ -14,8 +14,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Database
-import androidx.viewbinding.ViewBinding
 import com.example.composeproject1.databinding.ActivityLinechartBinding
 import com.example.composeproject1.ext.longSeriesClickListener
 import com.example.composeproject1.model.Constant.BundleKey.KEY_BUNDLE_BLOOD_PRESSURE_ID
@@ -29,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.Duration
 import java.util.Calendar
 
 class LineChartData : AppCompatActivity() {
@@ -212,7 +209,7 @@ class LineChartData : AppCompatActivity() {
     }
 
     private fun setClick(v: View, isAdd: Boolean, editText: EditText) {
-        v.longSeriesClickListener(scope = lifecycleScope, clickFunc = {
+        v.longSeriesClickListener(clickFunc = {
             val beforeCount = editText.text.toString().toIntOrNull() ?: 100
             editText.setText((if (isAdd) beforeCount + 1 else beforeCount - 1).toString())
         })
