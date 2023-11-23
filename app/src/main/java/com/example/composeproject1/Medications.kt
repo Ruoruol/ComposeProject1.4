@@ -70,35 +70,37 @@ class Medications : AppCompatActivity() {
                 var isShow by remember {
                     mutableStateOf(false)
                 }
-                ShowSelectMedication(isShow,{
-                    isShow=false
-                }){
+                ShowSelectMedication(isShow, {
+                    isShow = false
+                }) {
                     binding.messageET.setText(it)
                 }
                 AndroidViewBinding(ActivityMedicationsBinding::inflate) {
                     binding = this
                     binding.submitButton.setOnClickListener { scheduleNotification() }
                     this.bnSelectMediaction.setOnClickListener {
-                        isShow=true
+                        isShow = true
                     }
                     bnA.setOnClickListener {
-                        changeCount(true,count)
+                        changeCount(true, count)
                     }
                     bnS.setOnClickListener {
-                        changeCount(false,count)
+                        changeCount(false, count)
                     }
                 }
             }
         }
 
     }
-    private fun changeCount(isAdd:Boolean,editText: TextView){
-        val before=editText.text.toString().toIntOrNull()?:1
-        editText.text = kotlin.math.max(if (isAdd)before+1 else before -1,1).toString()
+
+    private fun changeCount(isAdd: Boolean, editText: TextView) {
+        val before = editText.text.toString().toIntOrNull() ?: 1
+        editText.text = kotlin.math.max(if (isAdd) before + 1 else before - 1, 1).toString()
     }
+
     @Composable
-    fun ShowSelectMedication(isShow:Boolean,dismiss:()->Unit,selectFunc:(String)->Unit){
-        val data= DataRepository.getMedicationList()
+    fun ShowSelectMedication(isShow: Boolean, dismiss: () -> Unit, selectFunc: (String) -> Unit) {
+        val data = DataRepository.getMedicationList()
         if (isShow) {
             Dialog(
                 onDismissRequest = {
@@ -106,18 +108,32 @@ class Medications : AppCompatActivity() {
                 },
                 properties = DialogProperties(usePlatformDefaultWidth = false)
             ) {
-                LazyColumn(modifier = Modifier.height(300.dp).fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(
-                    PrimaryColor)) {
+                LazyColumn(
+                    modifier = Modifier
+                        .height(300.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(
+                            PrimaryColor
+                        )
+                ) {
                     items(data) {
                         Text(text = it,
                             color = Color.Black,
                             fontSize = 25.sp,
-                            modifier = Modifier.fillMaxWidth().padding(top = 10.dp).background(
-                                Color(App.appContext.getColor(R.color.bt_color))
-                            ).padding(12.dp).clickable {
-                                dismiss.invoke()
-                                selectFunc.invoke(it)
-                            }.wrapContentSize())
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp)
+                                .background(
+                                    Color(App.appContext.getColor(R.color.bt_color))
+                                )
+                                .padding(12.dp)
+                                .clickable {
+                                    dismiss.invoke()
+                                    selectFunc.invoke(it)
+                                }
+                                .wrapContentSize()
+                        )
                     }
                 }
             }
@@ -130,10 +146,16 @@ class Medications : AppCompatActivity() {
         val desc = binding.messageET.text.toString()
         val time = getTime()
 
-        showAlert(time, title, binding.count.text.toString().toIntOrNull()?:1,desc)
+        showAlert(
+            time,
+            title,
+            if (binding.loopSwitch.isChecked) Int.MAX_VALUE else binding.count.text.toString()
+                .toIntOrNull() ?: 1,
+            desc
+        )
     }
 
-    private fun showAlert(time: Long, title: String,count:Int, message: String) {
+    private fun showAlert(time: Long, title: String, count: Int, message: String) {
         //Log.d("CCC", "Scheduled notification with title: $title, message: $message, time: $time")
         val date = Date(time)
         val dateFormat = DateFormat.getLongDateFormat(applicationContext)
@@ -152,14 +174,15 @@ class Medications : AppCompatActivity() {
                 requestAlarmPermission(this) {
                     if (it) {
                         lifecycleScope.launch {
-                            val data = DatabaseRepository.createMedicationData(title, message,count ,time)
+                            val data =
+                                DatabaseRepository.createMedicationData(title, message, count, time)
                             if (data != null) {
                                 val bundle = Bundle().apply {
                                     putString("title", title)
                                     putInt("id", data.id)
                                     putString("desc", message)
                                     putLong("time", time)
-                                    putInt("type",TYPE_MEDICATION)
+                                    putInt("type", TYPE_MEDICATION)
                                 }
                                 val isSuccess = AlarmTimer.setAlarmTimer(
                                     this@Medications,
@@ -172,7 +195,8 @@ class Medications : AppCompatActivity() {
                                 if (isSuccess) {
                                     Toast.makeText(this@Medications, "新增成功", Toast.LENGTH_SHORT)
                                         .show()
-                                    val intent = Intent(this@Medications, MedicationListActivity::class.java)
+                                    val intent =
+                                        Intent(this@Medications, MedicationListActivity::class.java)
                                     startActivity(intent)
                                     finish()
                                 } else {

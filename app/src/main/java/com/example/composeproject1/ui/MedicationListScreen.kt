@@ -35,7 +35,10 @@ fun MedicationListScreen(
     onEvent: (MedicationListEvent) -> Unit
 
 ) {
-    LazyColumn(Modifier.fillMaxSize().background(color = Purple40)) {
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .background(color = Purple40)) {
 
         items(1) {
             Text(text = "等待通知:", modifier = Modifier.padding(top = 14.dp), fontSize = 30.sp)
@@ -83,33 +86,49 @@ fun MedicationItem(
                 }
                 .padding(start = 14.dp, end = 14.dp)
         ) {
-            val (title, desc, time, count,deleteButton) = createRefs()
-            Text(medicationData.title, fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(title) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                bottom.linkTo(desc.top)
-            })
-            Text(medicationData.description, fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(desc) {
-                top.linkTo(title.bottom)
-                start.linkTo(parent.start)
-                bottom.linkTo(time.bottom)
-            })
-            Text(text ="剩余次数: ${medicationData.count}", fontSize = 25.sp, color = Color.White, modifier = Modifier.constrainAs(count) {
-                top.linkTo(desc.bottom)
-                start.linkTo(parent.start)
-                bottom.linkTo(time.top)
-            })
+            val (title, desc, time, count, deleteButton) = createRefs()
+            Text(
+                medicationData.title,
+                fontSize = 25.sp,
+                color = Color.White,
+                modifier = Modifier.constrainAs(title) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(desc.top)
+                })
+            Text(
+                medicationData.description,
+                fontSize = 25.sp,
+                color = Color.White,
+                modifier = Modifier.constrainAs(desc) {
+                    top.linkTo(title.bottom)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(time.bottom)
+                })
+            Text(
+                text = if (medicationData.count == Int.MAX_VALUE) "重复提醒" else "剩余次数: ${medicationData.count}",
+                fontSize = 25.sp,
+                color = Color.White,
+                modifier = Modifier.constrainAs(count) {
+                    top.linkTo(desc.bottom)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(time.top)
+                })
             val timeString = remember(medicationData.time) {
                 val date = Date(medicationData.time)
                 val dateFormat = DateFormat.getLongDateFormat(App.appContext)
                 val timeFormat = DateFormat.getTimeFormat(App.appContext)
                 dateFormat.format(date) + " " + timeFormat.format(date)
             }
-            Text(text = "時間：${timeString}", fontSize = 19.sp, color = Color.White, modifier = Modifier.constrainAs(time) {
-                top.linkTo(desc.bottom)
-                start.linkTo(parent.start)
-                bottom.linkTo(parent.bottom)
-            })
+            Text(
+                text = "時間：${timeString}",
+                fontSize = 19.sp,
+                color = Color.White,
+                modifier = Modifier.constrainAs(time) {
+                    top.linkTo(desc.bottom)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(parent.bottom)
+                })
             Button(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = DeleteColor,
@@ -121,7 +140,7 @@ fun MedicationItem(
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }) {
-                Text(text = "刪除", fontSize = 20.sp, color= Color.White)
+                Text(text = "刪除", fontSize = 20.sp, color = Color.White)
             }
 
         }
@@ -131,7 +150,7 @@ fun MedicationItem(
 @Preview
 @Composable
 fun MedicationListScreenPreview() {
-    MedicationItem(Modifier,false, MedicationData(1, "1", "1", "1", "1", 1,1 ,1)) {
+    MedicationItem(Modifier, false, MedicationData(1, "1", "1", "1", "1", 1, 1, 1)) {
 
     }
 
