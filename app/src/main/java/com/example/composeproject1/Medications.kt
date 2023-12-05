@@ -7,6 +7,7 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
+import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -39,6 +40,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.lifecycleScope
 import com.example.composeproject1.AlarmTimer.TIMER_ACTION
 import com.example.composeproject1.databinding.ActivityMedicationsBinding
+import com.example.composeproject1.ext.longSeriesClickListener
 import com.example.composeproject1.model.Constant.TYPE_MEDICATION
 import com.example.composeproject1.model.DataRepository
 import com.example.composeproject1.model.DatabaseRepository
@@ -81,17 +83,23 @@ class Medications : AppCompatActivity() {
                     this.bnSelectMediaction.setOnClickListener {
                         isShow=true
                     }
-                    bnA.setOnClickListener {
-                        changeCount(true,count)
-                    }
-                    bnS.setOnClickListener {
-                        changeCount(false,count)
-                    }
+                   
+                    setClick(binding.bnA, true, binding.count)
+                    
+                    setClick(binding.bnS, false, binding.count)
                 }
             }
         }
 
     }
+
+    private fun setClick(v: View, isAdd: Boolean, editText: TextView) {
+        v.longSeriesClickListener (clickFunc ={
+            val beforeCount = editText.text.toString().toIntOrNull() ?:100
+            editText.setText((if (isAdd)beforeCount + 1 else beforeCount - 1).toString())
+        })
+    }
+
     private fun changeCount(isAdd:Boolean,editText: TextView){
         val before=editText.text.toString().toIntOrNull()?:1
         editText.text = kotlin.math.max(if (isAdd)before+1 else before -1,1).toString()
@@ -141,11 +149,11 @@ class Medications : AppCompatActivity() {
 
         val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         AlertDialog.Builder(this)
-            .setTitle("Notification Scheduled")
+            .setTitle("確認提醒")
             .setMessage(
-                "Title: " + title +
-                        "\nMessage: " + message +
-                        "\nAt: " + formatter.format(date)
+                "" + title +
+                        "\n藥物類別: " + message +
+                        "\n時間: " + formatter.format(date)
             )
 
             .setPositiveButton("確定!") { _, _ ->
