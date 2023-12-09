@@ -107,12 +107,13 @@ class AlarmReceiver : BroadcastReceiver() {
         val id = intent.getIntExtra("id", 0)
         if (id == 0) return
         scope.launch {
-            DatabaseRepository.getDataHistoryById(id) ?: return@launch
+            val calender = DatabaseRepository.getDataHistoryById(id) ?: return@launch
             val title = intent.getStringExtra("title")
             createNotificationHistoryChannel(context)
             val nextIntent = Intent(context, CalenderActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK
             }
+
             val pendingIntent: PendingIntent =
                 PendingIntent.getActivity(
                     context,

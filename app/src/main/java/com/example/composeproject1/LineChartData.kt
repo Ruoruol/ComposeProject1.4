@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -13,9 +14,8 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Database
-import androidx.viewbinding.ViewBinding
 import com.example.composeproject1.databinding.ActivityLinechartBinding
+import com.example.composeproject1.ext.longSeriesClickListener
 import com.example.composeproject1.model.Constant.BundleKey.KEY_BUNDLE_BLOOD_PRESSURE_ID
 import com.example.composeproject1.model.Constant.BundleKey.KEY_BUNDLE_USER_ID
 import com.example.composeproject1.model.DatabaseRepository
@@ -27,7 +27,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.Duration
 import java.util.Calendar
 
 class LineChartData : AppCompatActivity() {
@@ -60,24 +59,23 @@ class LineChartData : AppCompatActivity() {
         tv_time = findViewById(R.id.tv_time)
 
         val binding = ActivityLinechartBinding.bind(findViewById<ViewGroup>(R.id.container))
-        binding.bn1s.setOnClickListener {
-            setClick(false, binding.etHigh)
-        }
-        binding.bn1a.setOnClickListener {
-            setClick(true, binding.etHigh)
-        }
-        binding.bn2s.setOnClickListener {
-            setClick(false, binding.etLow)
-        }
-        binding.bn2a.setOnClickListener {
-            setClick(true, binding.etLow)
-        }
-        binding.bn3s.setOnClickListener {
-            setClick(false, binding.etHb)
-        }
-        binding.bn3a.setOnClickListener {
-            setClick(true, binding.etHb)
-        }
+
+        setClick(binding.bn1s, false, binding.etHigh)
+
+        setClick(binding.bn1a, true, binding.etHigh)
+
+
+        setClick(binding.bn2s, false, binding.etLow)
+
+
+        setClick(binding.bn2a, true, binding.etLow)
+
+
+        setClick(binding.bn3s, false, binding.etHb)
+
+
+        setClick(binding.bn3a, true, binding.etHb)
+
         val adapter: ArrayAdapter<*> = ArrayAdapter<Any?>(this, R.layout.sp_time, time)
         spinner.setAdapter(adapter)
         var user_id = intent.getLongExtra(KEY_BUNDLE_USER_ID, -1)
@@ -190,9 +188,9 @@ class LineChartData : AppCompatActivity() {
                             ).collectLatest {
                                 withContext(Dispatchers.Main) {
                                     (it.getOrNull(0)).let {
-                                        et_high.setText(it?.bloodPressureHigh?.toString()?:"100")
-                                        et_low.setText(it?.bloodPressureLow?.toString()?:"100")
-                                        et_hb.setText(it?.heartBeat?.toString()?:"100")
+                                        et_high.setText(it?.bloodPressureHigh?.toString() ?: "100")
+                                        et_low.setText(it?.bloodPressureLow?.toString() ?: "100")
+                                        et_hb.setText(it?.heartBeat?.toString() ?: "100")
                                     }
                                 }
                             }
@@ -210,9 +208,12 @@ class LineChartData : AppCompatActivity() {
         }
     }
 
-    private fun setClick(isAdd: Boolean, editText: EditText) {
-        val beforeCount = editText.text.toString().toIntOrNull() ?: 100
-        editText.setText((if (isAdd) beforeCount + 1 else beforeCount - 1).toString())
+    private fun setClick(v: View, isAdd: Boolean, editText: EditText) {
+        v.longSeriesClickListener(clickFunc = {
+            val beforeCount = editText.text.toString().toIntOrNull() ?: 100
+            editText.setText((if (isAdd) beforeCount + 1 else beforeCount - 1).toString())
+        })
+
     }
 
     private val currentDate: Long
