@@ -106,7 +106,7 @@ fun MedicationItem(
                     bottom.linkTo(time.bottom)
                 })
             Text(
-                text = if (medicationData.count == Int.MAX_VALUE) "重复提醒" else "剩余次数: ${medicationData.count}",
+                text = if (medicationData.count == Int.MAX_VALUE) "重複提醒" else "剩餘次數: ${medicationData.count}",
                 fontSize = 25.sp,
                 color = Color.White,
                 modifier = Modifier.constrainAs(count) {

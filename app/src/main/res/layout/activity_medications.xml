@@ -16,11 +16,7 @@
         android:layout_marginTop="20dp"
         android:paddingHorizontal="20dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/titleET"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Title" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -52,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:text="选择药品" />
+            android:text="選擇藥品"
+            android:textSize="20sp"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -66,7 +63,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="提醒次数:"
+            android:text="提醒次數:"
             android:textSize="20sp" />
 
         <TextView
@@ -87,14 +84,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="-1" />
+            android:text="-1"
+            android:textSize="18sp"/>
 
         <Button
             android:id="@+id/bnA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="+1" />
+            android:text="+1"
+            android:textSize="18sp"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -109,7 +108,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="是否重复提醒" />
+            android:text="重複提醒"
+            android:textSize="20sp"/>
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/loopSwitch"
@@ -157,6 +157,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:text="設定" />
+        android:text="設定"
+        android:textSize="20sp"/>
 
 </LinearLayout>

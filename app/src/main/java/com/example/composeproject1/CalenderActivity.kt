@@ -210,10 +210,10 @@ class CalenderActivity : AppCompatActivity() {
                 tv_item = itemView.findViewById(R.id.tv_item)
                 itemView.setOnLongClickListener {
                     val builder = AlertDialog.Builder(this@CalenderActivity)
-                    builder.setTitle("Delete Message")
+                    builder.setTitle("刪除")
                     val position = adapterPosition
-                    builder.setMessage("Are you sure to delete message of " + pList[position].item + "?")
-                    builder.setPositiveButton("Yes") { dialogInterface, i ->
+                    builder.setMessage("是否確定刪除 " + pList[position].item + "?")
+                    builder.setPositiveButton("確定") { dialogInterface, i ->
                         val position = adapterPosition
                         val p = pList[position]
                         DatabaseRepository.deleteHistoryData(p)
@@ -221,7 +221,7 @@ class CalenderActivity : AppCompatActivity() {
                         notifyDataSetChanged()
                         dialogInterface.dismiss()
                     }
-                    builder.setNegativeButton("Cancel") { dialogInterface, i -> dialogInterface.dismiss() }
+                    builder.setNegativeButton("取消") { dialogInterface, i -> dialogInterface.dismiss() }
                     builder.show()
                     true
                 }

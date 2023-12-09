@@ -126,7 +126,7 @@ class Medications : AppCompatActivity() {
                 ) {
                     items(data) {
                         Text(text = it,
-                            color = Color.Black,
+                            color = Color.White,
                             fontSize = 25.sp,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -149,7 +149,7 @@ class Medications : AppCompatActivity() {
 
     @SuppressLint("ScheduleExactAlarm")
     private fun scheduleNotification() {
-        val title = binding.titleET.text.toString()
+        val title = "吃藥"
         val desc = binding.messageET.text.toString()
         val time = getTime()
 
