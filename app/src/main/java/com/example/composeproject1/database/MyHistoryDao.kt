@@ -7,11 +7,9 @@ import androidx.room.Query
 
 @Dao
 interface MyHistoryDao {
-    @Query("SELECT * FROM history_data ORDER BY date DESC")
-    fun fetchDataList(): List<MyHistoryData>
 
-    @Query("SELECT * FROM history_data WHERE date BETWEEN :start AND :end ORDER BY date DESC")
-    fun fetchDataListBetweenDate(start: Long, end: Long): List<MyHistoryData>
+    @Query("SELECT * FROM history_data WHERE date BETWEEN :start AND :end AND userId=:userId ORDER BY date DESC")
+    fun fetchDataListBetweenDate(start: Long, end: Long,userId:Long,): List<MyHistoryData>
 
     @Query("SELECT * FROM history_data WHERE `key`=:key")
     fun fetchDataByKey(key: String): List<MyHistoryData>

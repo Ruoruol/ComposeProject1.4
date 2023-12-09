@@ -9,6 +9,8 @@ class MyHistoryData(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo("id")
     val id: Int = 0,
+    @ColumnInfo("userId")
+    val userId:Long,
     @ColumnInfo("key")
     val key: String,
     @ColumnInfo("date")

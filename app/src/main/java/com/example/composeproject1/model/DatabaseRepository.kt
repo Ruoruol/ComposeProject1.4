@@ -98,7 +98,8 @@ object DatabaseRepository {
             val historyData = MyHistoryData(
                 key = key,
                 date = date,
-                item = time
+                item = time,
+                userId = AppGlobalRepository.userId
             )
             AppDatabase.getDatabase(App.appContext).myHistoryDao().insertData(historyData)
             return@withContext AppDatabase.getDatabase(App.appContext).myHistoryDao()
@@ -109,7 +110,7 @@ object DatabaseRepository {
     suspend fun fetchHistoryDataList(start: Long, end: Long): List<MyHistoryData> {
         return withContext(Dispatchers.IO) {
             return@withContext AppDatabase.getDatabase(App.appContext).myHistoryDao()
-                .fetchDataListBetweenDate(start, end)
+                .fetchDataListBetweenDate(start, end,AppGlobalRepository.userId)
         }
     }
 
